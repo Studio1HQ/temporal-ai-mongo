@@ -4,6 +4,62 @@ Enterprise-grade financial fraud detection system that combines MongoDB Atlas ve
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![License](https://img.shields.io/badge/license-Apache%202.0-blue)
 
+---
+
+## About this fork
+
+This fork adds an end-to-end **observability + evaluation loop** on top of the upstream MongoDB Temporal AI sample. Nothing in the upstream code paths is removed; the changes are strictly additive.
+
+**What was added:**
+
+- **Third LLM provider (`openai`)** — [`ai/openai_client.py`](ai/openai_client.py) plugs any OpenAI wire-protocol endpoint (real OpenAI, Nebius Token Factory, vLLM, LM Studio, ...) into the existing `LLM_PROVIDER` selector. Bedrock and Groq paths are untouched.
+- **Third embedding provider (`openai`)** — [`ai/embedding_client.py`](ai/embedding_client.py) gains an `EMBEDDING_PROVIDER=openai` branch that routes embeddings through the same OpenAI SDK client. Voyage + Cohere-via-Bedrock still work.
+- **Monocle instrumentation** — [`monocle_bootstrap.py`](monocle_bootstrap.py) wraps the app's `OpenAIClient`, `RuleEngine`, `RiskEngine`, `EmbeddingClient`, and three Temporal activities so every real request emits a full agent + tool trace. One `import monocle_bootstrap` line at the top of each entrypoint (`api/main.py`, `temporal/run_worker.py`) installs the wrappers.
+- **Recorded live traces** — [`evals/record_from_scenarios.py`](evals/record_from_scenarios.py) drives real end-to-end scenarios through the running app and merges the resulting Monocle traces per scenario into `evals/traces/*.json`.
+- **Custom eval template** — [`evals/templates/fraud_reasoning_grounded_v2.json`](evals/templates/fraud_reasoning_grounded_v2.json) grades whether the LLM reasoning cites values actually present in the rule engine, risk engine, and vector search tool spans.
+- **Eval seeder** — [`evals/submit_evals.py`](evals/submit_evals.py) submits hallucination / PII / bias / custom-template jobs against the recorded traces and polls the async Okahu evaluator until each `SUCCEEDED`. Verdicts then show up in the Okahu portal, the VS Code Okahu extension sidebar, and Kahu Chat.
+
+**How to run the loop:**
+
+```bash
+# use the OpenAI provider (Nebius or any OpenAI-compat endpoint)
+export LLM_PROVIDER=openai
+export EMBEDDING_PROVIDER=openai
+export MONOCLE_EXPORTER=file,okahu
+export OKAHU_API_KEY=okh_...
+export OKAHU_APP_ID=mongodb-fraud-agent_<six-chars>   # from portal.okahu.co
+
+uv sync --extra dev
+uv run python -m scripts.setup_mongodb                # seed Mongo (Atlas or Atlas Local)
+uv run python -m temporal.run_worker &                # worker
+uv run uvicorn api.main:app --port 8010 &             # API
+uv run python -m evals.record_from_scenarios          # 5 real scenarios end-to-end
+uv run python -m evals.submit_evals                   # graded evals → Okahu
+
+# Then in VS Code: open the Okahu extension, read the verdicts, ask Kahu
+# for the RCA, paste into Claude Code, approve the fix, re-run.
+```
+
+**Minimum required env** (see [`.env.example`](.env.example) for the full list):
+
+```ini
+MONGODB_URI=mongodb://localhost:27017/?directConnection=true   # or Atlas
+LLM_PROVIDER=openai
+OPENAI_API_KEY=...
+OPENAI_BASE_URL=https://api.tokenfactory.nebius.com/v1/        # or api.openai.com/v1/
+OPENAI_MODEL=meta-llama/Llama-3.3-70B-Instruct                 # or gpt-4o-mini
+EMBEDDING_PROVIDER=openai
+OPENAI_EMBEDDING_MODEL=Qwen/Qwen3-Embedding-8B                 # 4096 dims
+VECTOR_DIMENSION=4096
+OKAHU_API_KEY=okh_...
+OKAHU_APP_ID=mongodb-fraud-agent_...
+MONOCLE_EXPORTER=file,okahu
+```
+
+**Known constraint:** `mongodb-atlas-local` Docker image does not expose `$vectorSearch` without an Atlas CLI local deployment. The workflow's `find_similar_transactions` gracefully falls back to traditional/rule-based search; the rule and risk engine spans still give the graders plenty of evidence. For full vector-search coverage, point `MONGODB_URI` at an Atlas cluster.
+
+---
+
 ## Quick Start
 
 ```bash
@@ -24,6 +80,7 @@ cp .env.example .env
 
 ## Table of Contents
 
+- [About this fork](#about-this-fork)
 - [Overview](#overview)
 - [Business Value & Use Cases](#business-value--use-cases)
 - [Architecture](#architecture)
