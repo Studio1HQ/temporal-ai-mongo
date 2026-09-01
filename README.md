@@ -96,6 +96,7 @@ cp .env.example .env
 **What It Does:** Processes financial transactions through an AI-powered decision pipeline that combines rule-based evaluation, vector similarity search, and advanced fraud detection to provide real-time approve/reject decisions with detailed reasoning.
 
 **Business Value:**
+
 - ✅ **Advanced fraud detection** through hybrid AI + vector search approach
 - ✅ **Reduced operational costs** via automated transaction processing
 - ✅ **Fast decision processing** with asynchronous workflows
@@ -103,6 +104,7 @@ cp .env.example .env
 - ✅ **Complete audit trails** with explainable AI reasoning
 
 **PoV Scope Limitations:**
+
 - Mock data for demonstration (no real financial data)
 - Single-region deployment (production would be multi-region)
 - Performance not optimized for high throughput
@@ -121,13 +123,13 @@ cp .env.example .env
 
 ### Expected Measurable Outcomes (KPIs)
 
-| Metric | Description | PoV Demonstrates |
-|--------|-------------|------------------|
-| Detection Capability | AI-powered analysis | Multi-factor risk assessment |
-| Processing Speed | Workflow execution time | Asynchronous processing |
-| Auto-Approval | Transactions approved without manual review | Confidence-based decisions |
-| Manual Review | Human-in-the-loop capability | Queue management system |
-| Audit Trail | Decision tracking | Complete workflow history |
+| Metric               | Description                                 | PoV Demonstrates             |
+| -------------------- | ------------------------------------------- | ---------------------------- |
+| Detection Capability | AI-powered analysis                         | Multi-factor risk assessment |
+| Processing Speed     | Workflow execution time                     | Asynchronous processing      |
+| Auto-Approval        | Transactions approved without manual review | Confidence-based decisions   |
+| Manual Review        | Human-in-the-loop capability                | Queue management system      |
+| Audit Trail          | Decision tracking                           | Complete workflow history    |
 
 ### Enterprise Alignment
 
@@ -241,23 +243,23 @@ To produce a reproducible install in CI or fresh checkouts use
 
 ### Configuration
 
-| Variable | Description | Default | Required |
-|----------|-------------|---------|----------|
-| `MONGODB_URI` | MongoDB Atlas connection string | - | ✅ |
-| `MONGODB_DB_NAME` | Database name | `transaction_ai_poc` | ❌ |
-| `AWS_REGION` | AWS region for Bedrock | `us-east-1` | ✅ |
-| `AWS_ACCESS_KEY_ID` | AWS credentials for Bedrock | - | ✅ |
-| `AWS_SECRET_ACCESS_KEY` | AWS secret key | - | ✅ |
-| `LLM_PROVIDER` | LLM backend: `bedrock` (Claude) or `groq` | `bedrock` | ❌ |
-| `BEDROCK_MODEL_VERSION` | Bedrock Claude model ID | `us.anthropic.claude-opus-4-1-20250805-v1:0` | ❌ |
-| `GROQ_API_KEY` | Groq API key (if `LLM_PROVIDER=groq`) | - | ❌ |
-| `GROQ_MODEL_ID` | Groq model ID | `openai/gpt-oss-120b` | ❌ |
-| `VOYAGE_API_KEY` | Voyage AI API key (primary embeddings) | - | ❌ |
-| `VOYAGE_MODEL` | Voyage embedding model | `voyage-4` | ❌ |
-| `CONFIDENCE_THRESHOLD_APPROVE` | Min confidence for auto-approval | `85` | ❌ |
-| `AUTO_APPROVAL_LIMIT` | Max amount before manager approval (USD) | `50000` | ❌ |
-| `TEMPORAL_HOST` | Temporal server address | `localhost:7233` | ❌ |
-| `TEMPORAL_NAMESPACE` | Temporal namespace | `default` | ❌ |
+| Variable                       | Description                               | Default                                      | Required |
+| ------------------------------ | ----------------------------------------- | -------------------------------------------- | -------- |
+| `MONGODB_URI`                  | MongoDB Atlas connection string           | -                                            | ✅       |
+| `MONGODB_DB_NAME`              | Database name                             | `transaction_ai_poc`                         | ❌       |
+| `AWS_REGION`                   | AWS region for Bedrock                    | `us-east-1`                                  | ✅       |
+| `AWS_ACCESS_KEY_ID`            | AWS credentials for Bedrock               | -                                            | ✅       |
+| `AWS_SECRET_ACCESS_KEY`        | AWS secret key                            | -                                            | ✅       |
+| `LLM_PROVIDER`                 | LLM backend: `bedrock` (Claude) or `groq` | `bedrock`                                    | ❌       |
+| `BEDROCK_MODEL_VERSION`        | Bedrock Claude model ID                   | `us.anthropic.claude-opus-4-1-20250805-v1:0` | ❌       |
+| `GROQ_API_KEY`                 | Groq API key (if `LLM_PROVIDER=groq`)     | -                                            | ❌       |
+| `GROQ_MODEL_ID`                | Groq model ID                             | `openai/gpt-oss-120b`                        | ❌       |
+| `VOYAGE_API_KEY`               | Voyage AI API key (primary embeddings)    | -                                            | ❌       |
+| `VOYAGE_MODEL`                 | Voyage embedding model                    | `voyage-4`                                   | ❌       |
+| `CONFIDENCE_THRESHOLD_APPROVE` | Min confidence for auto-approval          | `85`                                         | ❌       |
+| `AUTO_APPROVAL_LIMIT`          | Max amount before manager approval (USD)  | `50000`                                      | ❌       |
+| `TEMPORAL_HOST`                | Temporal server address                   | `localhost:7233`                             | ❌       |
+| `TEMPORAL_NAMESPACE`           | Temporal namespace                        | `default`                                    | ❌       |
 
 For complete configuration options, see [docs/CONFIGURATION.md](docs/CONFIGURATION.md).
 
@@ -270,6 +272,7 @@ The system includes a comprehensive Streamlit dashboard for monitoring and manag
 ![Dashboard Overview](docs/images/ui-dashboard-main.png)
 
 **Key Features:**
+
 - 📊 **Real-time Metrics** - Monitor transaction volume, processing time, and AI confidence
 - 🔍 **Hybrid Search Demo** - Visualize how different search methods work together
 - 🚀 **Scenario Launcher** - Run pre-configured fraud detection scenarios
@@ -309,6 +312,7 @@ curl http://localhost:8000/api/transaction/<transaction_id>
 ### Demo Walkthrough: Fraud Detection
 
 #### Step 1: Launch Scenario
+
 Use the Scenario Launcher in the left sidebar to run pre-configured test cases:
 
 ![Active Workflows](docs/images/ui-active-workflows.png)
@@ -316,6 +320,7 @@ Use the Scenario Launcher in the left sidebar to run pre-configured test cases:
 Select "Fraud Ring Detection" and click "Run Scenario" to submit suspicious transactions.
 
 #### Step 2: View Results
+
 Monitor the scenario execution and see AI decisions:
 
 ![Scenario Results](docs/images/ui-scenario-results.png)
@@ -323,6 +328,7 @@ Monitor the scenario execution and see AI decisions:
 The system detects structuring patterns and escalates transactions for review.
 
 #### Step 3: Human Review
+
 Review escalated transactions with AI recommendations:
 
 ![Human Review](docs/images/ui-human-review-detail.png)
@@ -396,13 +402,13 @@ For detailed evaluation procedures, see [docs/EVALUATION_GUIDE.md](docs/EVALUATI
 
 ### Common Issues
 
-| Problem | Cause | Solution |
-|---------|-------|----------|
-| MongoDB connection failed | Invalid URI or network issue | Verify Atlas URI, check IP whitelist |
-| Bedrock timeout errors | Missing AWS credentials | Ensure AWS keys are in .env file |
-| Worker not processing | Temporal not running | Run `docker compose up -d` in `docker-compose/` |
-| Dashboard blank | API not accessible | Check API is running on port 8000 |
-| Vector search no results | Missing index | Run `uv run python -m scripts.setup_mongodb` |
+| Problem                   | Cause                        | Solution                                        |
+| ------------------------- | ---------------------------- | ----------------------------------------------- |
+| MongoDB connection failed | Invalid URI or network issue | Verify Atlas URI, check IP whitelist            |
+| Bedrock timeout errors    | Missing AWS credentials      | Ensure AWS keys are in .env file                |
+| Worker not processing     | Temporal not running         | Run `docker compose up -d` in `docker-compose/` |
+| Dashboard blank           | API not accessible           | Check API is running on port 8000               |
+| Vector search no results  | Missing index                | Run `uv run python -m scripts.setup_mongodb`    |
 
 For detailed troubleshooting, see [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).
 
@@ -422,13 +428,13 @@ uv run pytest tests/test_decimal_utils.py tests/test_rule_engine.py tests/test_r
 uv run pytest tests/test_db_integration.py tests/test_api_integration.py
 ```
 
-| Test type | Location | What it covers |
-|-----------|----------|----------------|
-| Unit | `tests/test_*.py` | Pure functions: decimal utils, rule/risk engines, schemas, prompts, AI client adapters |
-| Integration | `tests/test_db_integration.py` | Repositories against a real MongoDB 7.0 replica set spun up via `testcontainers` |
-| API | `tests/test_api_integration.py` | FastAPI endpoints via `TestClient` + real MongoDB |
-| Workflow | `tests/test_temporal_workflows.py` | Temporal workflow control flow via `temporalio.testing.WorkflowEnvironment` (in-process, time-skipping) |
-| Regression fences | `tests/test_motor_to_pymongo_async.py`, `tests/test_search_regression.py`, `tests/test_voyage_embeddings.py` | Static assertions guarding key migrations and behaviours |
+| Test type         | Location                                                                                                     | What it covers                                                                                          |
+| ----------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| Unit              | `tests/test_*.py`                                                                                            | Pure functions: decimal utils, rule/risk engines, schemas, prompts, AI client adapters                  |
+| Integration       | `tests/test_db_integration.py`                                                                               | Repositories against a real MongoDB 7.0 replica set spun up via `testcontainers`                        |
+| API               | `tests/test_api_integration.py`                                                                              | FastAPI endpoints via `TestClient` + real MongoDB                                                       |
+| Workflow          | `tests/test_temporal_workflows.py`                                                                           | Temporal workflow control flow via `temporalio.testing.WorkflowEnvironment` (in-process, time-skipping) |
+| Regression fences | `tests/test_motor_to_pymongo_async.py`, `tests/test_search_regression.py`, `tests/test_voyage_embeddings.py` | Static assertions guarding key migrations and behaviours                                                |
 
 Coverage configuration lives in `pyproject.toml` under `[tool.coverage.run]`
 and `[tool.coverage.report]`. The gate is `fail_under = 95`.
@@ -438,24 +444,28 @@ and `[tool.coverage.report]`. The gate is `fail_under = 95`.
 ### If PoV is Successful
 
 **Scaling Considerations:**
+
 - Deploy to Kubernetes for auto-scaling
 - Implement multi-region MongoDB Atlas clusters
 - Add a caching layer for performance
 - Configure CDN for dashboard assets
 
 **Security Hardening:**
+
 - Enable MongoDB encryption at rest
 - Implement OAuth2/SAML authentication
 - Add rate limiting and DDoS protection
 - Configure AWS PrivateLink for Bedrock
 
 **CI/CD Pipeline:**
+
 - GitHub Actions for automated testing
 - Docker image registry with vulnerability scanning
 - Blue-green deployment strategy
 - Automated performance regression testing
 
 **Production Monitoring:**
+
 - DataDog/New Relic APM integration
 - Custom CloudWatch metrics and alarms
 - PagerDuty incident management
@@ -471,14 +481,14 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 **Ready to evaluate?** Start with the [Quick Start](#quick-start) section above.
 
->**Note:** This repository contains a reference implementation intended for educational and exploratory purposes only. It is **not production-ready** in its current form.
+> **Note:** This repository contains a reference implementation intended for educational and exploratory purposes only. It is **not production-ready** in its current form.
 >
 > While the architecture and design patterns demonstrated here reflect best practices for building AI-Powered Transaction Processing System, the implementation may lack:
 >
-> * Comprehensive test coverage
-> * Robust error handling and validation
-> * Security hardening and access controls
-> * Performance optimizations for scale
-> * Long-term support or upgrade guarantees
+> - Comprehensive test coverage
+> - Robust error handling and validation
+> - Security hardening and access controls
+> - Performance optimizations for scale
+> - Long-term support or upgrade guarantees
 >
 > **Use this as a foundation** to guide your own production implementations, but ensure thorough validation and customization before deploying in real-world environments.
