@@ -16,7 +16,11 @@ What we register (each becomes a span on every real request):
    `rule_engine` (deterministic fraud signals; the grader's ground truth).
 4. `services.risk_engine.RiskEngine.calculate_base_risk` +
    `.apply_risk_factors` → tool spans `risk_engine_base` / `risk_engine_apply`.
-5. `TransactionActivities.*` for each Temporal activity → tool spans.
+5. Selected `TransactionActivities` methods (`enrich_transaction_data`,
+   `find_similar_transactions`, `store_decision`) → tool spans. These are
+   the activities that do unique Mongo-side work; `perform_risk_assessment`
+   and `ai_decision_analysis` are intentionally NOT wrapped because they
+   simply delegate to RiskEngine / OpenAIClient, which are already wrapped.
 """
 
 import json
@@ -173,7 +177,10 @@ WRAPPER_METHODS = [
         "wrapper_method": task_wrapper,
         "output_processor": _tool_processor("risk_engine_apply"),
     },
-    # Temporal activities — instance methods on TransactionActivities.
+    # Temporal activities — only the ones doing unique Mongo-side work.
+    # `perform_risk_assessment` and `ai_decision_analysis` delegate straight
+    # to RiskEngine / OpenAIClient (already wrapped above), so wrapping them
+    # again would just produce redundant outer spans.
     {
         "package": "temporal.activities",
         "object": "TransactionActivities",
@@ -185,26 +192,10 @@ WRAPPER_METHODS = [
     {
         "package": "temporal.activities",
         "object": "TransactionActivities",
-        "method": "perform_risk_assessment",
-        "span_name": "risk_assessment",
-        "wrapper_method": atask_wrapper,
-        "output_processor": _tool_processor("risk_assessment"),
-    },
-    {
-        "package": "temporal.activities",
-        "object": "TransactionActivities",
         "method": "find_similar_transactions",
         "span_name": "vector_search",
         "wrapper_method": atask_wrapper,
         "output_processor": _tool_processor("vector_search"),
-    },
-    {
-        "package": "temporal.activities",
-        "object": "TransactionActivities",
-        "method": "ai_decision_analysis",
-        "span_name": "ai_decision",
-        "wrapper_method": atask_wrapper,
-        "output_processor": _tool_processor("ai_decision"),
     },
     {
         "package": "temporal.activities",
