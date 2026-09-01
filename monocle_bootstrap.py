@@ -17,9 +17,6 @@ What we register (each becomes a span on every real request):
 4. `services.risk_engine.RiskEngine.calculate_base_risk` +
    `.apply_risk_factors` → tool spans `risk_engine_base` / `risk_engine_apply`.
 5. `TransactionActivities.*` for each Temporal activity → tool spans.
-
-Only registers Monocle if `OKAHU_API_KEY` (or `MONOCLE_EXPORTER`) is set,
-so import-time is cheap for tests / dev without observability.
 """
 
 import json
