@@ -1,0 +1,3060 @@
+[
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "1c83b866c6c837a64360babf9a8b1e90",
+      "span_id": "768b87128c108f93",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "1ed83ac616f4945b",
+    "start_time": "2026-08-31T14:48:00.816390Z",
+    "end_time": "2026-08-31T14:48:00.832305Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "POST",
+      "entity.1.route": "/api/transaction",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:00.816474Z",
+        "attributes": {
+          "request_body": "{\"transaction_type\": \"wire_transfer\", \"amount\": 75000, \"currency\": \"USD\", \"sender\": {\"name\": \"Acme Global LLC\", \"country\": \"US\", \"account_number\": \"ACC-HV-001\", \"customer_id\": \"CUST-HV-001\"}, \"recipient\": {\"name\": \"Berlin Partners GmbH\", \"country\": \"DE\", \"account_number\": \"ACC-HV-002\"}, \"description\": \"Quarterly settlement per contract SLA-2024-11\", \"reference_number\": \"HV-001\"}"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:00.831951Z",
+        "attributes": {
+          "status_code": "200",
+          "response": "{\"transaction_id\": \"TXN_20260831_2CE2686D\", \"status\": \"processing\", \"message\": \"Transaction submitted for AI analysis\", \"workflow_id\": \"txn-processing-TXN_20260831_2CE2686D\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "1c83b866c6c837a64360babf9a8b1e90",
+      "span_id": "1ed83ac616f4945b",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:00.816331Z",
+    "end_time": "2026-08-31T14:48:00.832458Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "openai.resources.chat.completions.completions.AsyncCompletions.create",
+    "context": {
+      "trace_id": "23692ec6c020b12ea7efddf17e18bc97",
+      "span_id": "136632962295db79",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "e0108cbfbabd60a8",
+    "start_time": "2026-08-31T14:46:52.981939Z",
+    "end_time": "2026-08-31T14:47:57.127870Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/ai/openai_client.py:28",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "inference.openai",
+      "entity.1.provider_name": "api.tokenfactory.nebius.com",
+      "entity.1.inference_endpoint": "https://api.tokenfactory.nebius.com/v1/",
+      "entity.2.name": "meta-llama/Llama-3.3-70B-Instruct",
+      "entity.2.type": "model.llm.meta-llama/Llama-3.3-70B-Instruct",
+      "span.type": "inference",
+      "scope.agentic.invocation": "e82587babde9a05c627696f206c3eb74",
+      "entity.count": 2,
+      "span.subtype": "turn_end"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:46:52.982067Z",
+        "attributes": {
+          "input": [
+            "{\"system\": \"You are a financial transaction analyzer.\\nAlways respond with a JSON object containing:\\n- decision: \\\"approve\\\", \\\"reject\\\", or \\\"escalate\\\"\\n- confidence: number between 0 and 100\\n- reasoning: explanation of your decision\\n- risk_factors: array of identified risks\\n- compliance_notes: relevant compliance considerations\\n\"}",
+            "{\"user\": \"You are an AI agent specialized in financial transaction fraud detection and compliance.\\nAnalyze the following transaction and provide a decision with detailed reasoning.\\n\\nTRANSACTION DETAILS:\\n- Transaction ID: TXN_20260831_9CB0083B\\n- Type: ach\\n- Amount: $850.00 USD\\n- Sender: Alice Anderson (Country: US)\\n- Recipient: Bob Baker (Country: US)\\n- Reference: LR-001\\n- Risk Flags: None\\n\\n\\nThis is an ACH TRANSFER - consider:\\n- Batch processing (lower risk)\\n- Reversible within 2 business days\\n- Common for payroll and recurring payments\\n- Lower individual transaction risk\\n\\nCUSTOMER HISTORY:\\n- Total Transactions (90 days): 1\\n- Average Transaction Amount: $850.00\\n- Total Volume: $850.00\\n- Previous Risk Incidents: 0\\n\\nNo similar historical cases found.\\n\\n\\nANALYSIS REQUIREMENTS:\\n1. Consider transaction type specific risks\\n2. Evaluate against money laundering patterns (including structuring/smurfing)\\n3. Check for sanctions and compliance concerns\\n4. Assess customer behavior patterns\\n5. Identify any anomalies or red flags\\n6. CRITICAL: Check for STRUCTURING patterns:\\n   - Multiple transactions just under $5,000 (typical reporting threshold)\\n   - Transactions between $4,900-$4,999 are highly suspicious\\n   - Same recipient receiving multiple similar amounts\\n   - Pattern of avoiding reporting thresholds\\n7. Check for FRAUD RING indicators:\\n   - Related entities sending to same recipient\\n   - Circular transaction patterns\\n   - Rapid sequential transfers\\n\\nProvide your response in the following JSON format:\\n{\\n    \\\"decision\\\": \\\"approve|reject|escalate\\\",\\n    \\\"confidence\\\": <0-100>,\\n    \\\"reasoning\\\": \\\"Detailed explanation of your decision\\\",\\n    \\\"risk_factors\\\": [\\\"List\\\", \\\"of\\\", \\\"identified\\\", \\\"risk\\\", \\\"factors\\\"],\\n    \\\"compliance_notes\\\": \\\"Any relevant compliance considerations\\\"\\n}\\n\\nDecision Guidelines:\\n- APPROVE: High confidence (>=85.0%), no significant risks\\n- REJECT: Clear fraud or compliance violations detected (e.g., sanctioned countries, confirmed fraud)\\n- ESCALATE: Medium confidence (<85.0%) OR suspicious patterns requiring human investigation\\n\\nIMPORTANT: Transactions showing potential structuring patterns (amounts between $4,900-$4,999) should be ESCALATED for human review with medium confidence (~65%). While suspicious, these patterns require human investigation to distinguish between intentional structuring and legitimate business transactions to avoid false positives.\\n\\nBe conservative - when in doubt, escalate for human review.\"}"
+          ]
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:47:57.127422Z",
+        "attributes": {
+          "response": "{\"assistant\": \"{\\n    \\\"decision\\\": \\\"approve\\\",\\n    \\\"confidence\\\": 95.0,\\n    \\\"reasoning\\\": \\\"The transaction is an ACH transfer, which is a lower-risk transaction type, especially since it's a batch processing transaction. The amount of $850.00 is well below the typical reporting threshold of $5,000, and there are no risk flags associated with the transaction. The customer history shows only one transaction in the last 90 days with no previous risk incidents, which suggests a low-risk customer behavior pattern. There are no indications of structuring, smurfing, or fraud ring activities, and no sanctions or compliance concerns were identified. Given the lack of suspicious patterns and the low-risk nature of the transaction, approval is warranted with high confidence.\\\",\\n    \\\"risk_factors\\\": [],\\n    \\\"compliance_notes\\\": \\\"The transaction complies with all relevant regulations, including anti-money laundering (AML) and know-your-customer (KYC) requirements. No sanctions or watchlist hits were found for the sender or recipient.\\\"\\n}\"}"
+        }
+      },
+      {
+        "name": "metadata",
+        "timestamp": "2026-08-31T14:47:57.127664Z",
+        "attributes": {
+          "completion_tokens": 211,
+          "prompt_tokens": 633,
+          "total_tokens": 844,
+          "cache_read_input_tokens": 16,
+          "finish_reason": "stop",
+          "finish_type": "success"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fraud_agent",
+    "context": {
+      "trace_id": "23692ec6c020b12ea7efddf17e18bc97",
+      "span_id": "e0108cbfbabd60a8",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "4101ffede564f76f",
+    "start_time": "2026-08-31T14:46:52.981642Z",
+    "end_time": "2026-08-31T14:47:57.129827Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/temporal/activities.py:641",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "agent.mongodb-fraud",
+      "entity.1.name": "fraud_agent",
+      "entity.1.description": "Fraud-detection LLM agent (MongoDB Temporal AI sample).",
+      "last.inference": "136632962295db79:*",
+      "span.type": "agentic.invocation",
+      "scope.agentic.invocation": "e82587babde9a05c627696f206c3eb74",
+      "entity.count": 1,
+      "span.subtype": "content_processing"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:46:52.981693Z",
+        "attributes": {
+          "input": "You are an AI agent specialized in financial transaction fraud detection and compliance.\nAnalyze the following transaction and provide a decision with detailed reasoning.\n\nTRANSACTION DETAILS:\n- Transaction ID: TXN_20260831_9CB0083B\n- Type: ach\n- Amount: $850.00 USD\n- Sender: Alice Anderson (Country: US)\n- Recipient: Bob Baker (Country: US)\n- Reference: LR-001\n- Risk Flags: None\n\n\nThis is an ACH TRANSFER - consider:\n- Batch processing (lower risk)\n- Reversible within 2 business days\n- Common for payroll and recurring payments\n- Lower individual transaction risk\n\nCUSTOMER HISTORY:\n- Total Transactions (90 days): 1\n- Average Transaction Amount: $850.00\n- Total Volume: $850.00\n- Previous Risk Incidents: 0\n\nNo similar historical cases found.\n\n\nANALYSIS REQUIREMENTS:\n1. Consider transaction type specific risks\n2. Evaluate against money laundering patterns (including structuring/smurfing)\n3. Check for sanctions and compliance concerns\n4. Assess customer behavior patterns\n5. Identify any anomalies or red flags\n6. CRITICAL: Check for STRUCTURING patterns:\n   - Multiple transactions just under $5,000 (typical reporting threshold)\n   - Transactions between $4,900-$4,999 are highly suspicious\n   - Same recipient receiving multiple similar amounts\n   - Pattern of avoiding reporting thresholds\n7. Check for FRAUD RING indicators:\n   - Related entities sending to same recipient\n   - Circular transaction patterns\n   - Rapid sequential transfers\n\nProvide your response in the following JSON format:\n{\n    \"decision\": \"approve|reject|escalate\",\n    \"confidence\": <0-100>,\n    \"reasoning\": \"Detailed explanation of your decision\",\n    \"risk_factors\": [\"List\", \"of\", \"identified\", \"risk\", \"factors\"],\n    \"compliance_notes\": \"Any relevant compliance considerations\"\n}\n\nDecision Guidelines:\n- APPROVE: High confidence (>=85.0%), no significant risks\n- REJECT: Clear fraud or compliance violations detected (e.g., sanctioned countries, confirmed fraud)\n- ESCALATE: Medium confidence (<85.0%) OR sus"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:47:57.129805Z",
+        "attributes": {
+          "response": "{\"decision\": \"approve\", \"confidence\": 95.0, \"reasoning\": \"The transaction is an ACH transfer, which is a lower-risk transaction type, especially since it's a batch processing transaction. The amount of $850.00 is well below the typical reporting threshold of $5,000, and there are no risk flags associated with the transaction. The customer history shows only one transaction in the last 90 days with no previous risk incidents, which suggests a low-risk customer behavior pattern. There are no indications of structuring, smurfing, or fraud ring activities, and no sanctions or compliance concerns were identified. Given the lack of suspicious patterns and the low-risk nature of the transaction, approval is warranted with high confidence.\", \"risk_factors\": [], \"compliance_notes\": \"The transaction complies with all relevant regulations, including anti-money laundering (AML) and know-your-customer (KYC) requirements. No sanctions or watchlist hits were found for the sender or recipient.\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "ai_decision",
+    "context": {
+      "trace_id": "23692ec6c020b12ea7efddf17e18bc97",
+      "span_id": "4101ffede564f76f",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "23fa267ea893ce67",
+    "start_time": "2026-08-31T14:46:52.980894Z",
+    "end_time": "2026-08-31T14:47:57.136089Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "tool.mongodb-fraud",
+      "entity.1.name": "ai_decision",
+      "entity.1.description": "Tool: ai_decision",
+      "entity.2.type": "agent.mongodb-fraud",
+      "entity.2.name": "fraud_agent",
+      "last.inference": "136632962295db79:*",
+      "span.type": "agentic.tool.invocation",
+      "entity.count": 2,
+      "span.subtype": "content_generation"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:46:52.980970Z",
+        "attributes": {
+          "input": "{\"customer_history\": {\"avg_amount\": \"850.0\", \"common_recipients\": [\"Bob Baker\"], \"customer_since\": null, \"kyc_status\": \"unknown\", \"risk_incidents\": 0, \"risk_level\": \"unknown\", \"total_amount\": \"850.0\", \"total_transactions\": 1}, \"enrichment_time_ms\": 5, \"risk_flags\": [], \"rule_results\": {\"recommended_action\": null, \"risk_flags\": [], \"rule_count\": 0, \"triggered_rules\": []}, \"transaction\": {\"amount\": 850.0, \"currency\": \"USD\", \"metadata\": {\"time_since_last_seconds\": 0.077, \"total_amount_1h\": 850.0, \"total_amount_24h\": 850.0, \"velocity_1h\": 1, \"velocity_24h\": 1, \"velocity_calculated_at\": \"2026-08-31T14:46:29.292000+00:00\"}, \"recipient\": {\"account_number\": \"ACC-LR-002\", \"country\": \"US\", \"name\": \"Bob Baker\"}, \"reference_number\": \"LR-001\", \"sender\": {\"account_number\": \"ACC-LR-001\", \"country\": \"US\", \"customer_id\": \"CUST-LR-001\", \"name\": \"Alice Anderson\"}, \"transaction_id\": \"TXN_20260831_9CB0083B\", \"transaction_type\": \"ach\"}}"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:47:57.136056Z",
+        "attributes": {
+          "response": "{\"decision\": \"approve\", \"confidence\": 95.0, \"reasoning\": \"The transaction is an ACH transfer, which is a lower-risk transaction type, especially since it's a batch processing transaction. The amount of $850.00 is well below the typical reporting threshold of $5,000, and there are no risk flags associated with the transaction. The customer history shows only one transaction in the last 90 days with no previous risk incidents, which suggests a low-risk customer behavior pattern. There are no indications of structuring, smurfing, or fraud ring activities, and no sanctions or compliance concerns were identified. Given the lack of suspicious patterns and the low-risk nature of the transaction, approval is warranted with high confidence.\", \"risk_factors\": [], \"compliance_notes\": \"The transaction complies with all relevant regulations, including anti-money laundering (AML) and know-your-customer (KYC) requirements. No sanctions or watchlist hits were found for the sender or recipient.\", \"risk_assessment\": {\"risk_score\": 10.0, \"risk_level\": \"low\", \"risk_factors\": [\"domestic transaction\", \"relatively small amount\", \"low-risk transaction type (ach)\"]}, \"similar_case_ids\": [], \"processing_time_ms\": 64151, \"rules_triggered\": []}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "23692ec6c020b12ea7efddf17e18bc97",
+      "span_id": "23fa267ea893ce67",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:46:52.980821Z",
+    "end_time": "2026-08-31T14:47:57.136787Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic",
+      "last.inference": "136632962295db79:*"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "2acd40df340c1f0fa415cfc98509fb6c",
+      "span_id": "f56cb46088e7ee25",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "c62391a76857be10",
+    "start_time": "2026-08-31T14:48:06.863441Z",
+    "end_time": "2026-08-31T14:48:06.868033Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:06.863529Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:06.867492Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "2acd40df340c1f0fa415cfc98509fb6c",
+      "span_id": "c62391a76857be10",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:06.863319Z",
+    "end_time": "2026-08-31T14:48:06.868095Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "2d61096b411d59fec2901e38d11bfae2",
+      "span_id": "8b1b0e90f4638719",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "4957dfd16f533370",
+    "start_time": "2026-08-31T14:47:57.771084Z",
+    "end_time": "2026-08-31T14:47:57.775313Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_9CB0083B",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:47:57.771184Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:47:57.774346Z",
+        "attributes": {
+          "status_code": "200",
+          "response": "{\"transaction_id\": \"TXN_20260831_9CB0083B\", \"decision\": \"approve\", \"confidence\": 95.0, \"risk_score\": 10.0, \"reasoning\": \"The transaction is an ACH transfer, which is a lower-risk transaction type, especially since it's a batch processing transaction. The amount of $850.00 is well below the typical reporting threshold of $5,000, and there are no risk flags associated with the transaction. The customer history shows only one transaction in the last 90 days with no previous risk incidents, which suggests a low-risk customer behavior pattern. There are no indications of structuring, smurfing, or fraud ring activities, and no sanctions or compliance concerns were identified. Given the lack of suspicious patterns and the low-risk nature of the transaction, approval is warranted with high confidence.\", \"processing_time_ms\": 64151, \"risk_factors\": []}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "2d61096b411d59fec2901e38d11bfae2",
+      "span_id": "4957dfd16f533370",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:47:57.770877Z",
+    "end_time": "2026-08-31T14:47:57.775785Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "2e4748f1d4278657bf5aad52d6819666",
+      "span_id": "9f74087af98b0495",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "7912c7bbd3f41864",
+    "start_time": "2026-08-31T14:48:10.884375Z",
+    "end_time": "2026-08-31T14:48:10.887444Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:10.884417Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:10.887035Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "2e4748f1d4278657bf5aad52d6819666",
+      "span_id": "7912c7bbd3f41864",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:10.884304Z",
+    "end_time": "2026-08-31T14:48:10.887474Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "3e47a643616edf055830a7fe1fee67d7",
+      "span_id": "01648647a8117f46",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "fee4bc2767f6069d",
+    "start_time": "2026-08-31T14:48:16.919852Z",
+    "end_time": "2026-08-31T14:48:16.925403Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:16.919929Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:16.924738Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "3e47a643616edf055830a7fe1fee67d7",
+      "span_id": "fee4bc2767f6069d",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:16.919738Z",
+    "end_time": "2026-08-31T14:48:16.925471Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "store_decision",
+    "context": {
+      "trace_id": "41ef112892a3ce4f0dd2067fb59f0630",
+      "span_id": "830f23932c1a8840",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "260d33c501a513d0",
+    "start_time": "2026-08-31T14:47:57.171474Z",
+    "end_time": "2026-08-31T14:47:57.175549Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "tool.mongodb-fraud",
+      "entity.1.name": "store_decision",
+      "entity.1.description": "Tool: store_decision",
+      "entity.2.type": "agent.mongodb-fraud",
+      "entity.2.name": "fraud_agent",
+      "span.type": "agentic.tool.invocation",
+      "entity.count": 2,
+      "span.subtype": "content_generation"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:47:57.171547Z",
+        "attributes": {
+          "input": "TXN_20260831_9CB0083B"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:47:57.175519Z",
+        "attributes": {
+          "response": "DEC_20260831_162CC895"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "41ef112892a3ce4f0dd2067fb59f0630",
+      "span_id": "260d33c501a513d0",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:47:57.171321Z",
+    "end_time": "2026-08-31T14:47:57.175625Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "4380e1fa496649362905f7207700ae73",
+      "span_id": "cf7015138ff685cc",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "528ba3541a296ea9",
+    "start_time": "2026-08-31T14:48:26.996623Z",
+    "end_time": "2026-08-31T14:48:26.998983Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:26.996664Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:26.998752Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "4380e1fa496649362905f7207700ae73",
+      "span_id": "528ba3541a296ea9",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:26.996569Z",
+    "end_time": "2026-08-31T14:48:26.999008Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "4e58a83a30b8acfd5da934112f15e986",
+      "span_id": "6a51cac3c455c020",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "f41c43ccb8610a7b",
+    "start_time": "2026-08-31T14:48:20.958070Z",
+    "end_time": "2026-08-31T14:48:20.965154Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:20.958205Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:20.964561Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "4e58a83a30b8acfd5da934112f15e986",
+      "span_id": "f41c43ccb8610a7b",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:20.957864Z",
+    "end_time": "2026-08-31T14:48:20.965217Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "55271c9d145daeb62588e876c619e142",
+      "span_id": "1608be593b8f162c",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "96ea400335b89616",
+    "start_time": "2026-08-31T14:48:14.904206Z",
+    "end_time": "2026-08-31T14:48:14.909061Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:14.904286Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:14.908573Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "55271c9d145daeb62588e876c619e142",
+      "span_id": "96ea400335b89616",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:14.904094Z",
+    "end_time": "2026-08-31T14:48:14.909114Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "60577b48e5f90d1eb0613fecad744bfd",
+      "span_id": "6cb07a5b31e8f6a3",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "95b95577970fc7c2",
+    "start_time": "2026-08-31T14:48:37.069609Z",
+    "end_time": "2026-08-31T14:48:37.080236Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:37.069704Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:37.079839Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "60577b48e5f90d1eb0613fecad744bfd",
+      "span_id": "95b95577970fc7c2",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:37.069431Z",
+    "end_time": "2026-08-31T14:48:37.080276Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "77cc9d061b287e5fcf4b5e124e81f038",
+      "span_id": "f1e920487643a822",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "309a87dd83457edf",
+    "start_time": "2026-08-31T14:48:35.055860Z",
+    "end_time": "2026-08-31T14:48:35.059955Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:35.055930Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:35.059336Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "77cc9d061b287e5fcf4b5e124e81f038",
+      "span_id": "309a87dd83457edf",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:35.055766Z",
+    "end_time": "2026-08-31T14:48:35.060006Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "780290a6a336a94e2c2c18019ef48760",
+      "span_id": "0409354b506ba51b",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "d1f08877fe64d063",
+    "start_time": "2026-08-31T14:48:31.013385Z",
+    "end_time": "2026-08-31T14:48:31.018650Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:31.013459Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:31.018196Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "780290a6a336a94e2c2c18019ef48760",
+      "span_id": "d1f08877fe64d063",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:31.013283Z",
+    "end_time": "2026-08-31T14:48:31.018699Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "8523c39a5608e99509990003577ca279",
+      "span_id": "a70f7ffbf0b87e5f",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "e7ce3f47f4301296",
+    "start_time": "2026-08-31T14:48:00.833242Z",
+    "end_time": "2026-08-31T14:48:00.835679Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:00.833274Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:00.835379Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "8523c39a5608e99509990003577ca279",
+      "span_id": "e7ce3f47f4301296",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:00.833196Z",
+    "end_time": "2026-08-31T14:48:00.835723Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "8fd72aa6230bddb320d24a49303a0a77",
+      "span_id": "6fef5593ac3aa0dd",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "5747c65cf50a7573",
+    "start_time": "2026-08-31T14:48:24.986072Z",
+    "end_time": "2026-08-31T14:48:24.988297Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:24.986101Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:24.988103Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "8fd72aa6230bddb320d24a49303a0a77",
+      "span_id": "5747c65cf50a7573",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:24.986030Z",
+    "end_time": "2026-08-31T14:48:24.988320Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "93743747d8a4d34b4627508d510c36f0",
+      "span_id": "c8a87b3c914fd864",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "7df188e0f3d30f13",
+    "start_time": "2026-08-31T14:48:39.092427Z",
+    "end_time": "2026-08-31T14:48:39.096970Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:39.092502Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:39.096308Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "93743747d8a4d34b4627508d510c36f0",
+      "span_id": "7df188e0f3d30f13",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:39.092322Z",
+    "end_time": "2026-08-31T14:48:39.097032Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "97a236548e4f661221b104130e970409",
+      "span_id": "1c17dd140f4f3a57",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "31bf1d4a30027736",
+    "start_time": "2026-08-31T14:48:33.021753Z",
+    "end_time": "2026-08-31T14:48:33.050633Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:33.021834Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:33.050086Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "97a236548e4f661221b104130e970409",
+      "span_id": "31bf1d4a30027736",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:33.021632Z",
+    "end_time": "2026-08-31T14:48:33.050696Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "a0dd0f1c184f8e2c02a37c0a5a241df8",
+      "span_id": "2543eeb5a2c63a0e",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "42fb355b2ce9ae5f",
+    "start_time": "2026-08-31T14:48:04.852272Z",
+    "end_time": "2026-08-31T14:48:04.855463Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:04.852323Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:04.854894Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "a0dd0f1c184f8e2c02a37c0a5a241df8",
+      "span_id": "42fb355b2ce9ae5f",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:04.852199Z",
+    "end_time": "2026-08-31T14:48:04.855515Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "openai.resources.embeddings.AsyncEmbeddings.create",
+    "context": {
+      "trace_id": "a47ed7167495017b5b5b5ca8d60d20ab",
+      "span_id": "92cd6ae7601c4c70",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "230e4889e51616a8",
+    "start_time": "2026-08-31T14:48:14.046151Z",
+    "end_time": "2026-08-31T14:48:14.895104Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/ai/embedding_client.py:96",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.name": "Qwen/Qwen3-Embedding-8B",
+      "entity.1.type": "model.embedding.Qwen/Qwen3-Embedding-8B",
+      "span.type": "embedding",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:14.046223Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:14.895033Z",
+        "attributes": {
+          "response": "index=0, embedding=[0.03322365880012512, 0.029308011755347252, -0.0011420631781220436, 0.01898494735..."
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "embed_transaction",
+    "context": {
+      "trace_id": "a47ed7167495017b5b5b5ca8d60d20ab",
+      "span_id": "230e4889e51616a8",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "4ffe3edf38779b00",
+    "start_time": "2026-08-31T14:48:14.045774Z",
+    "end_time": "2026-08-31T14:48:14.898205Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/temporal/activities.py:507",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "tool.mongodb-fraud",
+      "entity.1.name": "embed_transaction",
+      "entity.1.description": "Tool: embed_transaction",
+      "entity.2.type": "agent.mongodb-fraud",
+      "entity.2.name": "fraud_agent",
+      "span.type": "agentic.tool.invocation",
+      "entity.count": 2,
+      "span.subtype": "content_generation"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:14.045815Z",
+        "attributes": {
+          "input": "Transaction Type: wire_transfer\nAmount: 75000.0 USD\nTime Pattern: unknown\nGeographic Risk: US to DE\nAccount Age: Unknown days\nBusiness Context: personal\nPayment Method: wire\nRisk Flags: high_amount, rule_amount"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:14.898166Z",
+        "attributes": {
+          "response": "EmbeddingResult(embedding=[0.03322365880012512, 0.029308011755347252, -0.0011420631781220436, 0.018984947353601456, -0.0031443818006664515, 0.006318427622318268, 0.0007230595219880342, 0.018154356628656387, -0.018510323017835617, -0.015662580728530884, -0.024799088016152382, 0.010204409249126911, 0.04129226133227348, -0.013526774942874908, 0.031799785792827606, -0.02230731211602688, 0.04247881844639778, -0.0019578225910663605, 0.007208347320556641, 0.011865591630339622, 0.019222259521484375, 0.018510323017835617, 0.024205807596445084, -0.0064370837062597275, -0.02112075313925743, 0.022900592535734177, -0.027528174221515656, -0.007089691236615181, -0.018747635185718536, 0.031799785792827606, -0.02088344283401966, 0.0009714953484944999, 0.013052151538431644, -0.006526075769215822, -0.045089248567819595, 0.015543925575911999, 0.0012681351508945227, -0.018510323017835617, 0.004241948947310448, -0.029308011755347252, 0.009848440997302532, -0.003915645182132721, -0.009433145634829998, 0.00036709176492877305, 0.013111479580402374, -0.0072380113415420055, -0.023019248619675636, -0.02622295916080475, 0.0024769422598183155, -0.01732376404106617, 0.005072540603578091, -0.02491774410009384, 0.0001631518971407786, -0.007593979127705097, -0.018154356628656387, 0.016255861148238182, 0.0012903831666335464, 0.023731183260679245, 0.01530661340802908, 0.018510323017835617, -0.02064613066613674, 0.013052151538431644, -0.02966398000717163, 0.026697581633925438, 0.01530661340802908, 0.015543925575911999, -0.006822715513408184, -0.01637451723217964, -0.0004356896970421076, -0.012577527202665806, -0.031087851151823997, -0.011212984099984169, -0.014654005877673626, 0.03393559157848358, 0.02100209705531597, 0.03369828313589096, -0.02491774410009384, 0.007297338917851448, -0.003974973224103451, 0.006496411748230457, 0.019103603437542915, 0.007149019278585911, -0.008958522230386734, -0.012577527202665806, -0.003589341649785638, -0.01756107620894909, -0.006466747727245092, -0.014831990003585815"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "vector_search",
+    "context": {
+      "trace_id": "a47ed7167495017b5b5b5ca8d60d20ab",
+      "span_id": "4ffe3edf38779b00",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "fd110a945f3c3b90",
+    "start_time": "2026-08-31T14:48:14.045359Z",
+    "end_time": "2026-08-31T14:48:14.907800Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "tool.mongodb-fraud",
+      "entity.1.name": "vector_search",
+      "entity.1.description": "Tool: vector_search",
+      "entity.2.type": "agent.mongodb-fraud",
+      "entity.2.name": "fraud_agent",
+      "span.type": "agentic.tool.invocation",
+      "entity.count": 2,
+      "span.subtype": "content_generation"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:14.045449Z",
+        "attributes": {
+          "input": "{\"customer_history\": {\"avg_amount\": \"75000.0\", \"common_recipients\": [\"Berlin Partners GmbH\"], \"customer_since\": null, \"kyc_status\": \"unknown\", \"risk_incidents\": 0, \"risk_level\": \"unknown\", \"total_amount\": \"75000.0\", \"total_transactions\": 1}, \"enrichment_time_ms\": 5, \"risk_flags\": [\"high_amount\", \"rule_amount\"], \"rule_results\": {\"recommended_action\": \"escalate\", \"risk_flags\": [\"rule_amount\"], \"rule_count\": 1, \"triggered_rules\": [\"RULE_1C31356E\"]}, \"transaction\": {\"amount\": 75000.0, \"currency\": \"USD\", \"metadata\": {\"time_since_last_seconds\": 0.095401, \"total_amount_1h\": 75000.0, \"total_amount_24h\": 75000.0, \"velocity_1h\": 1, \"velocity_24h\": 1, \"velocity_calculated_at\": \"2026-08-31T14:48:00.912401+00:00\"}, \"recipient\": {\"account_number\": \"ACC-HV-002\", \"country\": \"DE\", \"name\": \"Berlin Partners GmbH\"}, \"reference_number\": \"HV-001\", \"sender\": {\"account_number\": \"ACC-HV-001\", \"country\": \"US\", \"customer_id\": \"CUST-HV-001\", \"name\": \"Acme Global LLC\"}, \"transaction_id\": \"TXN_20260831_2CE2686D\", \"transaction_type\": \"wire_transfer\"}}"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:14.907777Z",
+        "attributes": {
+          "response": "[]"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "a47ed7167495017b5b5b5ca8d60d20ab",
+      "span_id": "fd110a945f3c3b90",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:14.045271Z",
+    "end_time": "2026-08-31T14:48:14.908236Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "aa88546eb669095d0f4bebceb7bd05e6",
+      "span_id": "7d0cee242123a898",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "06e491f6cc241ba7",
+    "start_time": "2026-08-31T14:48:18.938549Z",
+    "end_time": "2026-08-31T14:48:18.943597Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:18.938642Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:18.943068Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "aa88546eb669095d0f4bebceb7bd05e6",
+      "span_id": "06e491f6cc241ba7",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:18.938417Z",
+    "end_time": "2026-08-31T14:48:18.943655Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "aab318c997000402a5a6b137f0894d62",
+      "span_id": "315b258d8cab7c79",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "9d08e23c511291a7",
+    "start_time": "2026-08-31T14:48:08.877509Z",
+    "end_time": "2026-08-31T14:48:08.882617Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:08.877635Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:08.882093Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "aab318c997000402a5a6b137f0894d62",
+      "span_id": "9d08e23c511291a7",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:08.877334Z",
+    "end_time": "2026-08-31T14:48:08.882681Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "store_decision",
+    "context": {
+      "trace_id": "ac3d5f4c97440a77c255458506351406",
+      "span_id": "1992f3fe0a85b927",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "2950811d2971e650",
+    "start_time": "2026-08-31T14:48:40.457060Z",
+    "end_time": "2026-08-31T14:48:40.460888Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "tool.mongodb-fraud",
+      "entity.1.name": "store_decision",
+      "entity.1.description": "Tool: store_decision",
+      "entity.2.type": "agent.mongodb-fraud",
+      "entity.2.name": "fraud_agent",
+      "span.type": "agentic.tool.invocation",
+      "entity.count": 2,
+      "span.subtype": "content_generation"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:40.457141Z",
+        "attributes": {
+          "input": "TXN_20260831_2CE2686D"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:40.460865Z",
+        "attributes": {
+          "response": "DEC_20260831_BEF5DF4D"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "ac3d5f4c97440a77c255458506351406",
+      "span_id": "2950811d2971e650",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:40.456878Z",
+    "end_time": "2026-08-31T14:48:40.460957Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "b2e87b825127d667e10bcff0f9fcbde3",
+      "span_id": "9760d29d561e3bed",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0b8632e593ada1c0",
+    "start_time": "2026-08-31T14:48:02.843978Z",
+    "end_time": "2026-08-31T14:48:02.849078Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:02.844082Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:02.848559Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "b2e87b825127d667e10bcff0f9fcbde3",
+      "span_id": "0b8632e593ada1c0",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:02.843835Z",
+    "end_time": "2026-08-31T14:48:02.849145Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "b7eb7c023286b0cfcfecebeb1fe85a79",
+      "span_id": "d272751f47fdbdc2",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "e60c6b1da7428283",
+    "start_time": "2026-08-31T14:48:29.008317Z",
+    "end_time": "2026-08-31T14:48:29.010607Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:29.008348Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:29.010310Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "b7eb7c023286b0cfcfecebeb1fe85a79",
+      "span_id": "e60c6b1da7428283",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:29.008271Z",
+    "end_time": "2026-08-31T14:48:29.010631Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "rule_engine",
+    "context": {
+      "trace_id": "bb3b89fdc00b0f6de20792cd524fde5f",
+      "span_id": "591b512dac25e4b8",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "dc50aef16f9d3e91",
+    "start_time": "2026-08-31T14:48:00.911228Z",
+    "end_time": "2026-08-31T14:48:00.912254Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/temporal/activities.py:178",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "tool.mongodb-fraud",
+      "entity.1.name": "rule_engine",
+      "entity.1.description": "Tool: rule_engine",
+      "entity.2.type": "agent.mongodb-fraud",
+      "entity.2.name": "fraud_agent",
+      "span.type": "agentic.tool.invocation",
+      "entity.count": 2,
+      "span.subtype": "content_generation"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:00.911277Z",
+        "attributes": {
+          "input": "{\"transaction_id\": \"TXN_20260831_2CE2686D\", \"transaction_type\": \"wire_transfer\", \"amount\": 75000.0, \"currency\": \"USD\", \"sender\": {\"account_number\": \"ACC-HV-001\", \"country\": \"US\", \"customer_id\": \"CUST-HV-001\", \"name\": \"Acme Global LLC\"}, \"recipient\": {\"account_number\": \"ACC-HV-002\", \"country\": \"DE\", \"name\": \"Berlin Partners GmbH\"}, \"reference_number\": \"HV-001\", \"metadata\": {}}"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:00.912236Z",
+        "attributes": {
+          "response": "{\"triggered_rules\": [\"RULE_1C31356E\"], \"risk_flags\": [\"rule_amount\"], \"recommended_action\": \"escalate\", \"rule_count\": 1}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "rule_engine",
+    "context": {
+      "trace_id": "bb3b89fdc00b0f6de20792cd524fde5f",
+      "span_id": "449757ef2a236952",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "dc50aef16f9d3e91",
+    "start_time": "2026-08-31T14:48:00.914029Z",
+    "end_time": "2026-08-31T14:48:00.914759Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/temporal/activities.py:249",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "tool.mongodb-fraud",
+      "entity.1.name": "rule_engine",
+      "entity.1.description": "Tool: rule_engine",
+      "entity.2.type": "agent.mongodb-fraud",
+      "entity.2.name": "fraud_agent",
+      "span.type": "agentic.tool.invocation",
+      "entity.count": 2,
+      "span.subtype": "content_generation"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:00.914076Z",
+        "attributes": {
+          "input": "{\"transaction_id\": \"TXN_20260831_2CE2686D\", \"transaction_type\": \"wire_transfer\", \"amount\": 75000.0, \"currency\": \"USD\", \"sender\": {\"account_number\": \"ACC-HV-001\", \"country\": \"US\", \"customer_id\": \"CUST-HV-001\", \"name\": \"Acme Global LLC\"}, \"recipient\": {\"account_number\": \"ACC-HV-002\", \"country\": \"DE\", \"name\": \"Berlin Partners GmbH\"}, \"reference_number\": \"HV-001\", \"metadata\": {\"velocity_1h\": 1, \"velocity_24h\": 1, \"total_amount_1h\": 75000.0, \"total_amount_24h\": 75000.0, \"time_since_last_seconds\": 0.095401, \"velocity_calculated_at\": \"2026-08-31T14:48:00.912401+00:00\"}}"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:00.914745Z",
+        "attributes": {
+          "response": "{\"triggered_rules\": [\"RULE_1C31356E\"], \"risk_flags\": [\"rule_amount\"], \"recommended_action\": \"escalate\", \"rule_count\": 1}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "enrich_transaction",
+    "context": {
+      "trace_id": "bb3b89fdc00b0f6de20792cd524fde5f",
+      "span_id": "dc50aef16f9d3e91",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "bf071e0f18fc80ce",
+    "start_time": "2026-08-31T14:48:00.909250Z",
+    "end_time": "2026-08-31T14:48:00.915021Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "tool.mongodb-fraud",
+      "entity.1.name": "enrich_transaction",
+      "entity.1.description": "Tool: enrich_transaction",
+      "entity.2.type": "agent.mongodb-fraud",
+      "entity.2.name": "fraud_agent",
+      "span.type": "agentic.tool.invocation",
+      "entity.count": 2,
+      "span.subtype": "content_generation"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:00.909324Z",
+        "attributes": {
+          "input": "TransactionDetails(transaction_id='TXN_20260831_2CE2686D', transaction_type='wire_transfer', amount='75000.0', currency='USD', sender={'account_number': 'ACC-HV-001', 'country': 'US', 'customer_id': 'CUST-HV-001', 'name': 'Acme Global LLC'}, recipient={'account_number': 'ACC-HV-002', 'country': 'DE', 'name': 'Berlin Partners GmbH'}, reference_number='HV-001', risk_flags=[], metadata={})"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:00.915011Z",
+        "attributes": {
+          "response": "{\"transaction\": {\"transaction_id\": \"TXN_20260831_2CE2686D\", \"transaction_type\": \"wire_transfer\", \"amount\": 75000.0, \"currency\": \"USD\", \"sender\": {\"account_number\": \"ACC-HV-001\", \"country\": \"US\", \"customer_id\": \"CUST-HV-001\", \"name\": \"Acme Global LLC\"}, \"recipient\": {\"account_number\": \"ACC-HV-002\", \"country\": \"DE\", \"name\": \"Berlin Partners GmbH\"}, \"reference_number\": \"HV-001\", \"metadata\": {\"velocity_1h\": 1, \"velocity_24h\": 1, \"total_amount_1h\": 75000.0, \"total_amount_24h\": 75000.0, \"time_since_last_seconds\": 0.095401, \"velocity_calculated_at\": \"2026-08-31T14:48:00.912401+00:00\"}}, \"customer_history\": {\"customer_since\": null, \"risk_level\": \"unknown\", \"kyc_status\": \"unknown\", \"total_transactions\": 1, \"avg_amount\": \"75000.0\", \"total_amount\": \"75000.0\", \"risk_incidents\": 0, \"common_recipients\": [\"Berlin Partners GmbH\"]}, \"rule_results\": {\"triggered_rules\": [\"RULE_1C31356E\"], \"risk_flags\": [\"rule_amount\"], \"recommended_action\": \"escalate\", \"rule_count\": 1}, \"risk_flags\": [\"high_amount\", \"rule_amount\"], \"enrichment_time_ms\": 5}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "bb3b89fdc00b0f6de20792cd524fde5f",
+      "span_id": "bf071e0f18fc80ce",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:00.909189Z",
+    "end_time": "2026-08-31T14:48:00.915362Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "c22f9082ff7bcddcd180ba33928ae5a8",
+      "span_id": "30adde16726943b6",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "4d6f953f1ac4adc6",
+    "start_time": "2026-08-31T14:48:41.098923Z",
+    "end_time": "2026-08-31T14:48:41.101554Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:41.098982Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:41.100986Z",
+        "attributes": {
+          "status_code": "200",
+          "response": "{\"transaction_id\": \"TXN_20260831_2CE2686D\", \"decision\": \"escalate\", \"confidence\": 70.0, \"risk_score\": 70.0, \"reasoning\": \"The transaction is a wire transfer of $75,000.00, which is a high-value transaction. Although there are no risk flags, the customer has only one previous transaction in the last 90 days, which is also of the same amount. This lack of historical data and the fact that the transaction is a wire transfer, which is irreversible and has immediate settlement, raises some concerns. Additionally, the transaction amount is well above the typical reporting threshold, but since it's a single transaction and not a pattern of transactions just under $5,000, it doesn't trigger structuring concerns directly. However, given the high value and the lack of transaction history, it's prudent to escalate this transaction for human review to ensure it doesn't represent a fraud or money laundering risk.\", \"processing_time_ms\": 25445, \"risk_factors\": [\"High-value transaction\", \"Lack of historical transaction data\", \"Irreversible nature of wire transfer\", \"Immediate settlement\"]}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "c22f9082ff7bcddcd180ba33928ae5a8",
+      "span_id": "4d6f953f1ac4adc6",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:41.098851Z",
+    "end_time": "2026-08-31T14:48:41.101836Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "openai.resources.chat.completions.completions.AsyncCompletions.create",
+    "context": {
+      "trace_id": "d2ba14106ad59c94608e3aa0c41463dd",
+      "span_id": "b5f53b463ff19588",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "cacdfd9f1651e7e7",
+    "start_time": "2026-08-31T14:48:00.929771Z",
+    "end_time": "2026-08-31T14:48:14.005236Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/ai/openai_client.py:28",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "inference.openai",
+      "entity.1.provider_name": "api.tokenfactory.nebius.com",
+      "entity.1.inference_endpoint": "https://api.tokenfactory.nebius.com/v1/",
+      "entity.2.name": "meta-llama/Llama-3.3-70B-Instruct",
+      "entity.2.type": "model.llm.meta-llama/Llama-3.3-70B-Instruct",
+      "span.type": "inference",
+      "scope.agentic.invocation": "ae9e2da4fe3e0b25a64c29d2646feb2b",
+      "entity.count": 2,
+      "span.subtype": "turn_end"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:00.929915Z",
+        "attributes": {
+          "input": [
+            "{\"system\": \"You are a financial transaction analyzer.\\nAlways respond with a JSON object containing:\\n- decision: \\\"approve\\\", \\\"reject\\\", or \\\"escalate\\\"\\n- confidence: number between 0 and 100\\n- reasoning: explanation of your decision\\n- risk_factors: array of identified risks\\n- compliance_notes: relevant compliance considerations\\n\"}",
+            "{\"user\": \"Assess the risk level of this financial transaction:\\n\\nTransaction Type: wire_transfer\\nAmount: $75,000.00\\nSender Country: US\\nRecipient Country: DE\\n\\nProvide a risk score from 0-100 where:\\n- 0-25: Low risk\\n- 26-50: Medium risk  \\n- 51-75: High risk\\n- 76-100: Very high risk\\n\\nConsider factors like transaction type, amount, countries involved, and typical fraud patterns.\\n\\nRespond with a JSON object containing:\\n{\\n    \\\"risk_score\\\": <0-100>,\\n    \\\"risk_level\\\": \\\"low|medium|high|very_high\\\",\\n    \\\"key_risk_factors\\\": [\\\"list\\\", \\\"of\\\", \\\"factors\\\"]\\n}\"}"
+          ]
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:14.005041Z",
+        "attributes": {
+          "response": "{\"assistant\": \"{\\n    \\\"risk_score\\\": 60,\\n    \\\"risk_level\\\": \\\"high\\\",\\n    \\\"key_risk_factors\\\": [\\n        \\\"Large transaction amount ($75,000.00)\\\",\\n        \\\"International wire transfer (US to DE)\\\",\\n        \\\"Potential for money laundering or terrorist financing\\\",\\n        \\\"Higher risk of fraud or scams involving cross-border transactions\\\"\\n    ]\\n}\"}"
+        }
+      },
+      {
+        "name": "metadata",
+        "timestamp": "2026-08-31T14:48:14.005186Z",
+        "attributes": {
+          "completion_tokens": 74,
+          "prompt_tokens": 249,
+          "total_tokens": 323,
+          "cache_read_input_tokens": 16,
+          "finish_reason": "stop",
+          "finish_type": "success"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fraud_agent",
+    "context": {
+      "trace_id": "d2ba14106ad59c94608e3aa0c41463dd",
+      "span_id": "cacdfd9f1651e7e7",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "ca0208e50f610d81",
+    "start_time": "2026-08-31T14:48:00.929510Z",
+    "end_time": "2026-08-31T14:48:14.006202Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/temporal/activities.py:389",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "agent.mongodb-fraud",
+      "entity.1.name": "fraud_agent",
+      "entity.1.description": "Fraud-detection LLM agent (MongoDB Temporal AI sample).",
+      "last.inference": "b5f53b463ff19588:*",
+      "span.type": "agentic.invocation",
+      "scope.agentic.invocation": "ae9e2da4fe3e0b25a64c29d2646feb2b",
+      "entity.count": 1,
+      "span.subtype": "content_processing"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:00.929542Z",
+        "attributes": {
+          "input": "Assess the risk level of this financial transaction:\n\nTransaction Type: wire_transfer\nAmount: $75,000.00\nSender Country: US\nRecipient Country: DE\n\nProvide a risk score from 0-100 where:\n- 0-25: Low risk\n- 26-50: Medium risk  \n- 51-75: High risk\n- 76-100: Very high risk\n\nConsider factors like transaction type, amount, countries involved, and typical fraud patterns.\n\nRespond with a JSON object containing:\n{\n    \"risk_score\": <0-100>,\n    \"risk_level\": \"low|medium|high|very_high\",\n    \"key_risk_factors\": [\"list\", \"of\", \"factors\"]\n}"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:14.006175Z",
+        "attributes": {
+          "response": "{\"risk_score\": 60, \"risk_level\": \"high\", \"key_risk_factors\": [\"Large transaction amount ($75,000.00)\", \"International wire transfer (US to DE)\", \"Potential for money laundering or terrorist financing\", \"Higher risk of fraud or scams involving cross-border transactions\"], \"decision\": \"escalate\", \"confidence\": 50, \"reasoning\": \"No reasoning provided\", \"risk_factors\": [], \"compliance_notes\": \"\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "risk_assessment",
+    "context": {
+      "trace_id": "d2ba14106ad59c94608e3aa0c41463dd",
+      "span_id": "ca0208e50f610d81",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "4161af208069d921",
+    "start_time": "2026-08-31T14:48:00.929243Z",
+    "end_time": "2026-08-31T14:48:14.009895Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "tool.mongodb-fraud",
+      "entity.1.name": "risk_assessment",
+      "entity.1.description": "Tool: risk_assessment",
+      "entity.2.type": "agent.mongodb-fraud",
+      "entity.2.name": "fraud_agent",
+      "last.inference": "b5f53b463ff19588:*",
+      "span.type": "agentic.tool.invocation",
+      "entity.count": 2,
+      "span.subtype": "content_generation"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:00.929298Z",
+        "attributes": {
+          "input": "{\"customer_history\": {\"avg_amount\": \"75000.0\", \"common_recipients\": [\"Berlin Partners GmbH\"], \"customer_since\": null, \"kyc_status\": \"unknown\", \"risk_incidents\": 0, \"risk_level\": \"unknown\", \"total_amount\": \"75000.0\", \"total_transactions\": 1}, \"enrichment_time_ms\": 5, \"risk_flags\": [\"high_amount\", \"rule_amount\"], \"rule_results\": {\"recommended_action\": \"escalate\", \"risk_flags\": [\"rule_amount\"], \"rule_count\": 1, \"triggered_rules\": [\"RULE_1C31356E\"]}, \"transaction\": {\"amount\": 75000.0, \"currency\": \"USD\", \"metadata\": {\"time_since_last_seconds\": 0.095401, \"total_amount_1h\": 75000.0, \"total_amount_24h\": 75000.0, \"velocity_1h\": 1, \"velocity_24h\": 1, \"velocity_calculated_at\": \"2026-08-31T14:48:00.912401+00:00\"}, \"recipient\": {\"account_number\": \"ACC-HV-002\", \"country\": \"DE\", \"name\": \"Berlin Partners GmbH\"}, \"reference_number\": \"HV-001\", \"sender\": {\"account_number\": \"ACC-HV-001\", \"country\": \"US\", \"customer_id\": \"CUST-HV-001\", \"name\": \"Acme Global LLC\"}, \"transaction_id\": \"TXN_20260831_2CE2686D\", \"transaction_type\": \"wire_transfer\"}}"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:14.009868Z",
+        "attributes": {
+          "response": "{\"risk_score\": 70, \"risk_level\": \"high\", \"risk_factors\": [\"Large transaction amount ($75,000.00)\", \"International wire transfer (US to DE)\", \"Potential for money laundering or terrorist financing\", \"Higher risk of fraud or scams involving cross-border transactions\", \"high_amount\", \"rule_amount\"], \"requires_enhanced_diligence\": true, \"compliance_checks\": {\"sanctions_check\": true, \"aml_check\": true, \"kyc_verified\": false}}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "d2ba14106ad59c94608e3aa0c41463dd",
+      "span_id": "4161af208069d921",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:00.929190Z",
+    "end_time": "2026-08-31T14:48:14.010499Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic",
+      "last.inference": "b5f53b463ff19588:*"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "openai.resources.chat.completions.completions.AsyncCompletions.create",
+    "context": {
+      "trace_id": "da35b5a23049f49bee0c150a8ff20ea5",
+      "span_id": "cfa6a222229eed91",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "e5ceef741379d390",
+    "start_time": "2026-08-31T14:48:14.970179Z",
+    "end_time": "2026-08-31T14:48:40.408630Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/ai/openai_client.py:28",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "inference.openai",
+      "entity.1.provider_name": "api.tokenfactory.nebius.com",
+      "entity.1.inference_endpoint": "https://api.tokenfactory.nebius.com/v1/",
+      "entity.2.name": "meta-llama/Llama-3.3-70B-Instruct",
+      "entity.2.type": "model.llm.meta-llama/Llama-3.3-70B-Instruct",
+      "span.type": "inference",
+      "scope.agentic.invocation": "9347e1c757a9aff02106f0df4c789cd1",
+      "entity.count": 2,
+      "span.subtype": "turn_end"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:14.970333Z",
+        "attributes": {
+          "input": [
+            "{\"system\": \"You are a financial transaction analyzer.\\nAlways respond with a JSON object containing:\\n- decision: \\\"approve\\\", \\\"reject\\\", or \\\"escalate\\\"\\n- confidence: number between 0 and 100\\n- reasoning: explanation of your decision\\n- risk_factors: array of identified risks\\n- compliance_notes: relevant compliance considerations\\n\"}",
+            "{\"user\": \"You are an AI agent specialized in financial transaction fraud detection and compliance.\\nAnalyze the following transaction and provide a decision with detailed reasoning.\\n\\nTRANSACTION DETAILS:\\n- Transaction ID: TXN_20260831_2CE2686D\\n- Type: wire_transfer\\n- Amount: $75,000.00 USD\\n- Sender: Acme Global LLC (Country: US)\\n- Recipient: Berlin Partners GmbH (Country: DE)\\n- Reference: HV-001\\n- Risk Flags: None\\n\\n\\nThis is a WIRE TRANSFER - consider:\\n- Irreversible nature (high risk)\\n- Immediate settlement\\n- Common for high-value B2B payments\\n- Higher fraud risk\\n\\nCUSTOMER HISTORY:\\n- Total Transactions (90 days): 1\\n- Average Transaction Amount: $75,000.00\\n- Total Volume: $75,000.00\\n- Previous Risk Incidents: 0\\n\\nNo similar historical cases found.\\n\\n\\nANALYSIS REQUIREMENTS:\\n1. Consider transaction type specific risks\\n2. Evaluate against money laundering patterns (including structuring/smurfing)\\n3. Check for sanctions and compliance concerns\\n4. Assess customer behavior patterns\\n5. Identify any anomalies or red flags\\n6. CRITICAL: Check for STRUCTURING patterns:\\n   - Multiple transactions just under $5,000 (typical reporting threshold)\\n   - Transactions between $4,900-$4,999 are highly suspicious\\n   - Same recipient receiving multiple similar amounts\\n   - Pattern of avoiding reporting thresholds\\n7. Check for FRAUD RING indicators:\\n   - Related entities sending to same recipient\\n   - Circular transaction patterns\\n   - Rapid sequential transfers\\n\\nProvide your response in the following JSON format:\\n{\\n    \\\"decision\\\": \\\"approve|reject|escalate\\\",\\n    \\\"confidence\\\": <0-100>,\\n    \\\"reasoning\\\": \\\"Detailed explanation of your decision\\\",\\n    \\\"risk_factors\\\": [\\\"List\\\", \\\"of\\\", \\\"identified\\\", \\\"risk\\\", \\\"factors\\\"],\\n    \\\"compliance_notes\\\": \\\"Any relevant compliance considerations\\\"\\n}\\n\\nDecision Guidelines:\\n- APPROVE: High confidence (>=85.0%), no significant risks\\n- REJECT: Clear fraud or compliance violations detected (e.g., sanctioned countries, confirmed fraud)\\n- ESCALATE: Medium confidence (<85.0%) OR suspicious patterns requiring human investigation\\n\\nIMPORTANT: Transactions showing potential structuring patterns (amounts between $4,900-$4,999) should be ESCALATED for human review with medium confidence (~65%). While suspicious, these patterns require human investigation to distinguish between intentional structuring and legitimate business transactions to avoid false positives.\\n\\nBe conservative - when in doubt, escalate for human review.\\n\\nRULES TRIGGERED: RULE_1C31356E\\nRULE RECOMMENDATION: escalate\"}"
+          ]
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:40.408242Z",
+        "attributes": {
+          "response": "{\"assistant\": \"{\\n    \\\"decision\\\": \\\"escalate\\\",\\n    \\\"confidence\\\": 70.0,\\n    \\\"reasoning\\\": \\\"The transaction is a wire transfer of $75,000.00, which is a high-value transaction. Although there are no risk flags, the customer has only one previous transaction in the last 90 days, which is also of the same amount. This lack of historical data and the fact that the transaction is a wire transfer, which is irreversible and has immediate settlement, raises some concerns. Additionally, the transaction amount is well above the typical reporting threshold, but since it's a single transaction and not a pattern of transactions just under $5,000, it doesn't trigger structuring concerns directly. However, given the high value and the lack of transaction history, it's prudent to escalate this transaction for human review to ensure it doesn't represent a fraud or money laundering risk.\\\",\\n    \\\"risk_factors\\\": [\\n        \\\"High-value transaction\\\",\\n        \\\"Lack of historical transaction data\\\",\\n        \\\"Irreversible nature of wire transfer\\\",\\n        \\\"Immediate settlement\\\"\\n    ],\\n    \\\"compliance_notes\\\": \\\"The transaction does not appear to involve sanctioned countries or entities based on the provided information. However, a thorough review is necessary to ensure compliance with all relevant regulations, including anti-money laundering (AML) and know-your-customer (KYC) requirements.\\\"\\n}\"}"
+        }
+      },
+      {
+        "name": "metadata",
+        "timestamp": "2026-08-31T14:48:40.408460Z",
+        "attributes": {
+          "completion_tokens": 277,
+          "prompt_tokens": 662,
+          "total_tokens": 939,
+          "cache_read_input_tokens": 16,
+          "finish_reason": "stop",
+          "finish_type": "success"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fraud_agent",
+    "context": {
+      "trace_id": "da35b5a23049f49bee0c150a8ff20ea5",
+      "span_id": "e5ceef741379d390",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "193d6de37824be7e",
+    "start_time": "2026-08-31T14:48:14.969903Z",
+    "end_time": "2026-08-31T14:48:40.410895Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/temporal/activities.py:641",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "agent.mongodb-fraud",
+      "entity.1.name": "fraud_agent",
+      "entity.1.description": "Fraud-detection LLM agent (MongoDB Temporal AI sample).",
+      "last.inference": "cfa6a222229eed91:*",
+      "span.type": "agentic.invocation",
+      "scope.agentic.invocation": "9347e1c757a9aff02106f0df4c789cd1",
+      "entity.count": 1,
+      "span.subtype": "content_processing"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:14.969946Z",
+        "attributes": {
+          "input": "You are an AI agent specialized in financial transaction fraud detection and compliance.\nAnalyze the following transaction and provide a decision with detailed reasoning.\n\nTRANSACTION DETAILS:\n- Transaction ID: TXN_20260831_2CE2686D\n- Type: wire_transfer\n- Amount: $75,000.00 USD\n- Sender: Acme Global LLC (Country: US)\n- Recipient: Berlin Partners GmbH (Country: DE)\n- Reference: HV-001\n- Risk Flags: None\n\n\nThis is a WIRE TRANSFER - consider:\n- Irreversible nature (high risk)\n- Immediate settlement\n- Common for high-value B2B payments\n- Higher fraud risk\n\nCUSTOMER HISTORY:\n- Total Transactions (90 days): 1\n- Average Transaction Amount: $75,000.00\n- Total Volume: $75,000.00\n- Previous Risk Incidents: 0\n\nNo similar historical cases found.\n\n\nANALYSIS REQUIREMENTS:\n1. Consider transaction type specific risks\n2. Evaluate against money laundering patterns (including structuring/smurfing)\n3. Check for sanctions and compliance concerns\n4. Assess customer behavior patterns\n5. Identify any anomalies or red flags\n6. CRITICAL: Check for STRUCTURING patterns:\n   - Multiple transactions just under $5,000 (typical reporting threshold)\n   - Transactions between $4,900-$4,999 are highly suspicious\n   - Same recipient receiving multiple similar amounts\n   - Pattern of avoiding reporting thresholds\n7. Check for FRAUD RING indicators:\n   - Related entities sending to same recipient\n   - Circular transaction patterns\n   - Rapid sequential transfers\n\nProvide your response in the following JSON format:\n{\n    \"decision\": \"approve|reject|escalate\",\n    \"confidence\": <0-100>,\n    \"reasoning\": \"Detailed explanation of your decision\",\n    \"risk_factors\": [\"List\", \"of\", \"identified\", \"risk\", \"factors\"],\n    \"compliance_notes\": \"Any relevant compliance considerations\"\n}\n\nDecision Guidelines:\n- APPROVE: High confidence (>=85.0%), no significant risks\n- REJECT: Clear fraud or compliance violations detected (e.g., sanctioned countries, confirmed fraud)\n- ESCALATE: Medium confidence (<85.0%) OR suspic"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:40.410871Z",
+        "attributes": {
+          "response": "{\"decision\": \"escalate\", \"confidence\": 70.0, \"reasoning\": \"The transaction is a wire transfer of $75,000.00, which is a high-value transaction. Although there are no risk flags, the customer has only one previous transaction in the last 90 days, which is also of the same amount. This lack of historical data and the fact that the transaction is a wire transfer, which is irreversible and has immediate settlement, raises some concerns. Additionally, the transaction amount is well above the typical reporting threshold, but since it's a single transaction and not a pattern of transactions just under $5,000, it doesn't trigger structuring concerns directly. However, given the high value and the lack of transaction history, it's prudent to escalate this transaction for human review to ensure it doesn't represent a fraud or money laundering risk.\", \"risk_factors\": [\"High-value transaction\", \"Lack of historical transaction data\", \"Irreversible nature of wire transfer\", \"Immediate settlement\"], \"compliance_notes\": \"The transaction does not appear to involve sanctioned countries or entities based on the provided information. However, a thorough review is necessary to ensure compliance with all relevant regulations, including anti-money laundering (AML) and know-your-customer (KYC) requirements.\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "ai_decision",
+    "context": {
+      "trace_id": "da35b5a23049f49bee0c150a8ff20ea5",
+      "span_id": "193d6de37824be7e",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "811c7b1d1a7e8b8f",
+    "start_time": "2026-08-31T14:48:14.969039Z",
+    "end_time": "2026-08-31T14:48:40.417303Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.type": "tool.mongodb-fraud",
+      "entity.1.name": "ai_decision",
+      "entity.1.description": "Tool: ai_decision",
+      "entity.2.type": "agent.mongodb-fraud",
+      "entity.2.name": "fraud_agent",
+      "last.inference": "cfa6a222229eed91:*",
+      "span.type": "agentic.tool.invocation",
+      "entity.count": 2,
+      "span.subtype": "content_generation"
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:14.969120Z",
+        "attributes": {
+          "input": "{\"customer_history\": {\"avg_amount\": \"75000.0\", \"common_recipients\": [\"Berlin Partners GmbH\"], \"customer_since\": null, \"kyc_status\": \"unknown\", \"risk_incidents\": 0, \"risk_level\": \"unknown\", \"total_amount\": \"75000.0\", \"total_transactions\": 1}, \"enrichment_time_ms\": 5, \"risk_flags\": [\"high_amount\", \"rule_amount\"], \"rule_results\": {\"recommended_action\": \"escalate\", \"risk_flags\": [\"rule_amount\"], \"rule_count\": 1, \"triggered_rules\": [\"RULE_1C31356E\"]}, \"transaction\": {\"amount\": 75000.0, \"currency\": \"USD\", \"metadata\": {\"time_since_last_seconds\": 0.095401, \"total_amount_1h\": 75000.0, \"total_amount_24h\": 75000.0, \"velocity_1h\": 1, \"velocity_24h\": 1, \"velocity_calculated_at\": \"2026-08-31T14:48:00.912401+00:00\"}, \"recipient\": {\"account_number\": \"ACC-HV-002\", \"country\": \"DE\", \"name\": \"Berlin Partners GmbH\"}, \"reference_number\": \"HV-001\", \"sender\": {\"account_number\": \"ACC-HV-001\", \"country\": \"US\", \"customer_id\": \"CUST-HV-001\", \"name\": \"Acme Global LLC\"}, \"transaction_id\": \"TXN_20260831_2CE2686D\", \"transaction_type\": \"wire_transfer\"}}"
+        }
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:40.417277Z",
+        "attributes": {
+          "response": "{\"decision\": \"escalate\", \"confidence\": 70.0, \"reasoning\": \"The transaction is a wire transfer of $75,000.00, which is a high-value transaction. Although there are no risk flags, the customer has only one previous transaction in the last 90 days, which is also of the same amount. This lack of historical data and the fact that the transaction is a wire transfer, which is irreversible and has immediate settlement, raises some concerns. Additionally, the transaction amount is well above the typical reporting threshold, but since it's a single transaction and not a pattern of transactions just under $5,000, it doesn't trigger structuring concerns directly. However, given the high value and the lack of transaction history, it's prudent to escalate this transaction for human review to ensure it doesn't represent a fraud or money laundering risk.\", \"risk_factors\": [\"High-value transaction\", \"Lack of historical transaction data\", \"Irreversible nature of wire transfer\", \"Immediate settlement\"], \"compliance_notes\": \"The transaction does not appear to involve sanctioned countries or entities based on the provided information. However, a thorough review is necessary to ensure compliance with all relevant regulations, including anti-money laundering (AML) and know-your-customer (KYC) requirements.\", \"risk_assessment\": {\"risk_score\": 70.0, \"risk_level\": \"high\", \"risk_factors\": [\"Large transaction amount ($75,000.00)\", \"International wire transfer (US to DE)\", \"Potential for money laundering or terrorist financing\", \"Higher risk of fraud or scams involving cross-border transactions\", \"high_amount\", \"rule_amount\"]}, \"similar_case_ids\": [], \"processing_time_ms\": 25445, \"rules_triggered\": [\"RULE_1C31356E\"]}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "da35b5a23049f49bee0c150a8ff20ea5",
+      "span_id": "811c7b1d1a7e8b8f",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:14.968944Z",
+    "end_time": "2026-08-31T14:48:40.418282Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/temporalio/worker/_activity.py:909",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic",
+      "last.inference": "cfa6a222229eed91:*"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "e0f13519b3b9973e493eac4d73bad550",
+      "span_id": "1b59ee33b771ed16",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "b53a89d8a5b9ef74",
+    "start_time": "2026-08-31T14:48:12.894270Z",
+    "end_time": "2026-08-31T14:48:12.896849Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:12.894303Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:12.896601Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "e0f13519b3b9973e493eac4d73bad550",
+      "span_id": "b53a89d8a5b9ef74",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:12.894221Z",
+    "end_time": "2026-08-31T14:48:12.896878Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "fastapi.request",
+    "context": {
+      "trace_id": "ff792be21681aabaa438fa65d654f96e",
+      "span_id": "2f24fb23bea769e1",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "6a336a0ceb201cd4",
+    "start_time": "2026-08-31T14:48:22.979078Z",
+    "end_time": "2026-08-31T14:48:22.984188Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "entity.1.method": "GET",
+      "entity.1.route": "/api/transaction/{transaction_id}",
+      "entity.1.url": "http://127.0.0.1:8010/api/transaction/TXN_20260831_2CE2686D",
+      "span.type": "http.process",
+      "entity.count": 1
+    },
+    "events": [
+      {
+        "name": "data.input",
+        "timestamp": "2026-08-31T14:48:22.979163Z",
+        "attributes": {}
+      },
+      {
+        "name": "data.output",
+        "timestamp": "2026-08-31T14:48:22.983470Z",
+        "attributes": {
+          "status_code": "202",
+          "response": "{\"detail\": \"Decision pending\"}"
+        }
+      }
+    ],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  },
+  {
+    "name": "workflow",
+    "context": {
+      "trace_id": "ff792be21681aabaa438fa65d654f96e",
+      "span_id": "6a336a0ceb201cd4",
+      "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-08-31T14:48:22.978947Z",
+    "end_time": "2026-08-31T14:48:22.984243Z",
+    "status": {
+      "status_code": "OK"
+    },
+    "attributes": {
+      "monocle_apptrace.version": "0.8.14",
+      "monocle_apptrace.language": "python",
+      "span_source": "/Users/anon/Documents/writing/okahu-eval/mongodb-temporal-ai-agent-qs/.venv/lib/python3.13/site-packages/starlette/routing.py:680",
+      "workflow.name": "mongodb-fraud-agent",
+      "span.type": "workflow",
+      "entity.1.name": "mongodb-fraud-agent",
+      "entity.1.type": "workflow.generic",
+      "entity.2.type": "app_hosting.generic",
+      "entity.2.name": "generic"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+      "attributes": {
+        "service.name": "mongodb-fraud-agent"
+      },
+      "schema_url": ""
+    }
+  }
+]

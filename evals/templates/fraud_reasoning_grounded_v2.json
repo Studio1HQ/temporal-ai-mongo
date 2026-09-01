@@ -1,0 +1,15 @@
+{
+ "template": {
+  "name": "fraud_reasoning_grounded_v2",
+  "eval_prompt": "You are auditing the reasoning produced by a fraud-detection AI for a single financial transaction. You will be shown the model's output (its decision, confidence, reasoning, and risk factors) alongside the tool spans that ran before the decision.\n\nThe tool spans include, at minimum:\n  - rule_engine: the deterministic rule engine's output, listing triggered rules, their names, and a recommended action.\n  - risk_engine_base / risk_engine_apply: the numeric risk score contributions and the named risk_flags applied.\n  - risk_assessment: the aggregate risk score, level, and named risk_factors.\n  - vector_search: any similar historical transactions found via hybrid search (or an empty list).\n\nClassify the reasoning as one of:\n  - 'grounded': every claim in the reasoning cites a value present in one of the tool spans above, in the transaction itself, or in customer_history. It may combine those values into higher-level statements (e.g. 'the cross-border wire above $50K triggered wire_over_limit') as long as each atomic claim maps back to a tool output or transaction fact.\n  - 'partially_grounded': most claims map to tool outputs, but there is at least one minor unsupported detail (e.g. a hedged reference to 'unusual behavior' with no data, an imprecise regulatory citation) that does not change the decision.\n  - 'hallucinated': the reasoning invents material facts — a fake past transaction, a nonexistent regulation, a threshold not present in rule_engine, or a jurisdiction attribute the transaction did not carry — and those invented facts directly support the decision.\n\nBe strict. Prefer 'hallucinated' over 'partially_grounded' when any invented fact directly supports the decision. Restated tool output values (echoing rule names, risk score numbers, thresholds) are always grounded.",
+  "structure_output": {
+   "label": {
+    "description": "Grounding classification of the fraud reasoning.",
+    "enums": ["grounded", "partially_grounded", "hallucinated"]
+   },
+   "explanation": {
+    "description": "Which specific claims in the reasoning are grounded vs. unsupported, cited from the tool spans and transaction facts."
+   }
+  }
+ }
+}
