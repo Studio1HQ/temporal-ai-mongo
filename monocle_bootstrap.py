@@ -1,8 +1,11 @@
 """Monocle telemetry bootstrap for the mongodb-temporal-ai-agent-qs sample.
 
-All Monocle wiring lives here. The vendored sample is otherwise untouched —
-the only addition is one `import monocle_bootstrap` line at the top of each
-entrypoint (api/main.py, temporal/run_worker.py, app.py).
+All Monocle wiring lives here. The vendored sample is otherwise untouched.
+The only change to the sample is a single `import monocle_bootstrap` line at
+the top of the two processes that emit spans: `api/main.py` (the FastAPI
+server) and `temporal/run_worker.py` (the workflow worker). The Streamlit
+dashboard `app.py` only talks to the API over HTTP, so it does not need the
+bootstrap; its user actions flow through the API and produce spans there.
 
 What we register (each becomes a span on every real request):
 
