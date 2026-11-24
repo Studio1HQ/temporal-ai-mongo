@@ -1,146 +1,198 @@
-# AI-Powered Transaction Processing System – Proof of Value
+<div align="center">
 
-Enterprise-grade financial fraud detection system that combines MongoDB Atlas vector search, Temporal workflows, and AWS Bedrock AI to demonstrate real-time transaction analysis and intelligent fraud detection capabilities.
+<img src="https://raw.githubusercontent.com/Studio1HQ/Studio1HQ/main/assets/banners/temporal-ai-mongo.webp" alt="Fraud Detection Agent with Temporal and Okahu: Temporal and MongoDB fraud agent with Monocle traces and Okahu evals" width="100%" />
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![License](https://img.shields.io/badge/license-Apache%202.0-blue)
+<br />
+<br />
 
----
+# Fraud Detection Agent with Temporal and Okahu
 
-## About this fork
+### Temporal and MongoDB fraud agent with Monocle traces and Okahu evals
 
-This fork adds an end-to-end **observability + evaluation loop** on top of the upstream MongoDB Temporal AI sample. Nothing in the upstream code paths is removed; the changes are strictly additive.
+A transaction fraud-detection system built on Temporal workflows, MongoDB Atlas vector search and an LLM, extended with Monocle tracing and Okahu-graded evals and an OpenAI-compatible provider such as Nebius.
 
-**What was added:**
+<br />
 
-- **Third LLM provider (`openai`)** — [`ai/openai_client.py`](ai/openai_client.py) plugs any OpenAI wire-protocol endpoint (real OpenAI, Nebius Token Factory, vLLM, LM Studio, ...) into the existing `LLM_PROVIDER` selector. Bedrock and Groq paths are untouched.
-- **Third embedding provider (`openai`)** — [`ai/embedding_client.py`](ai/embedding_client.py) gains an `EMBEDDING_PROVIDER=openai` branch that routes embeddings through the same OpenAI SDK client. Voyage + Cohere-via-Bedrock still work.
-- **Monocle instrumentation** — [`monocle_bootstrap.py`](monocle_bootstrap.py) wraps the app's `OpenAIClient`, `RuleEngine`, `RiskEngine`, `EmbeddingClient`, and three Temporal activities so every real request emits a full agent + tool trace. One `import monocle_bootstrap` line at the top of each entrypoint (`api/main.py`, `temporal/run_worker.py`) installs the wrappers.
-- **Recorded live traces** — [`evals/record_from_scenarios.py`](evals/record_from_scenarios.py) drives real end-to-end scenarios through the running app and merges the resulting Monocle traces per scenario into `evals/traces/*.json`.
-- **Custom eval template** — [`evals/templates/fraud_reasoning_grounded_v2.json`](evals/templates/fraud_reasoning_grounded_v2.json) grades whether the LLM reasoning cites values actually present in the rule engine, risk engine, and vector search tool spans.
-- **Eval seeder** — [`evals/submit_evals.py`](evals/submit_evals.py) submits hallucination / PII / bias / custom-template jobs against the recorded traces and polls the async Okahu evaluator until each `SUCCEEDED`. Verdicts then show up in the Okahu portal, the VS Code Okahu extension sidebar, and Kahu Chat.
+[![Built by Studio1](https://img.shields.io/badge/Built_by_Studio1-f97316?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTYwIiBmaWxsPSJub25lIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTAgMzVDMCAxNi42ODA3IDE0LjA3NDQgMS42NDg0NCAzMiAwLjEyNjk1M1YxNDFINTEuMDUyM0M1Mi40MzA4IDEzNy4zNDQgNTQuNzQ0NiAxMzMuNjg5IDU3Ljk5MzggMTMwLjAzM0M2MS4xNDQ2IDEyNi41MDggNjQuNjg5MiAxMjMuNDQgNjguNjI3NyAxMjAuODI5QzcyLjU2NjIgMTE4LjM0OSA3Ni4zNTY5IDExNi43ODIgODAgMTE2LjEyOVY4Ni43NTQ0Qzc1LjQ3MDggODcuOTI5MiA3MS4zODQ2IDg5LjY5MTkgNjcuNzQxNSA5Mi4wNDE1QzY0IDk0LjUyMjUgNjAuNzUwOCA5Ny40NiA1Ny45OTM4IDEwMC44NTRDNTYuNTM0NSAxMDIuNzIgNTUuMjU0NSAxMDQuNjU5IDU0LjE1MzkgMTA2LjY3MVYwSDEyNUMxNDQuMzMgMCAxNjAgMTUuNjY5OSAxNjAgMzVWMTI1QzE2MCAxNDQuMzMgMTQ0LjMzIDE2MCAxMjUgMTYwSDEyNFYxOEgxMDQuOTQ4QzEwMy41NjkgMjEuNjgxNiAxMDEuMjU1IDI1LjM2MjggOTguMDA2MiAyOS4wNDQ0Qzk0Ljg1NTQgMzIuNTk0MiA5MS4zMTA4IDM1LjY4NDEgODcuMzcyMyAzOC4zMTRDODMuNDMzOCA0MC44MTIgNzkuNjQzMSA0Mi4zODk2IDc2IDQzLjA0NzRWNzIuNjMwNEM4MC41MjkyIDcxLjQ0NzMgODQuNjE1NCA2OS42NzI0IDg4LjI1ODUgNjcuMzA1N0M5MiA2NC44MDc2IDk1LjI0OTIgNjEuODQ5MSA5OC4wMDYyIDU4LjQzMDdDOTkuNDY1NSA1Ni41NTEzIDEwMC43NDUgNTQuNTk4NiAxMDEuODQ2IDUyLjU3MjNWMTYwSDM1QzE1LjY3IDE2MCAwIDE0NC4zMyAwIDEyNVYzNVoiIGZpbGw9IiNmZmZmZmYiLz48L3N2Zz4K)](https://studio1hq.com)
+[![Built with Okahu](https://img.shields.io/badge/Built_with_Okahu-141414?style=for-the-badge)](https://okahu.ai)
 
-**How to run the loop:**
+[Okahu docs](https://docs.okahu.ai) &nbsp;·&nbsp; [Okahu](https://okahu.ai) &nbsp;·&nbsp; [Temporal](https://temporal.io) &nbsp;·&nbsp; [MongoDB](https://mongodb.com) &nbsp;·&nbsp; [Nebius](https://nebius.com) &nbsp;·&nbsp; [More examples](https://github.com/Studio1HQ) &nbsp;·&nbsp; [studio1hq.com](https://studio1hq.com)
+
+</div>
+
+<br />
+
+## Overview
+
+This is an AI-powered transaction processing system. A FastAPI service starts a [Temporal](https://temporal.io) workflow for each transaction. The workflow runs rule checks and risk scoring, searches [MongoDB Atlas](https://www.mongodb.com/docs/atlas/) for similar past transactions with vector search, and asks an LLM for an approve, review or reject decision with written reasoning. Borderline cases go to a human review queue shown in a Streamlit dashboard.
+
+It is a fork of the MongoDB Temporal AI agent sample (`mongodb-partners/mongodb-temporal-ai-agent-qs`) with an observability and evaluation loop added. [Monocle](https://github.com/monocle2ai/monocle) instruments the app, traces are recorded per scenario, and [Okahu](https://okahu.ai) grades them for hallucination, PII, bias and whether the reasoning is grounded in tool output.
+
+<p align="center"><img src="docs/images/ui-dashboard-main.png" alt="Streamlit dashboard showing transaction metrics and decisions" width="100%" /></p>
+
+<details>
+<summary>More screenshots</summary>
+
+<p align="center"><img src="docs/images/ui-active-workflows.png" alt="Scenario launcher and active workflows" width="100%" /></p>
+<p align="center"><img src="docs/images/ui-scenario-results.png" alt="Scenario results" width="100%" /></p>
+<p align="center"><img src="docs/images/ui-human-review-detail.png" alt="Human review detail" width="100%" /></p>
+<p align="center"><img src="docs/images/ui-human-review-queue.png" alt="Human review queue" width="100%" /></p>
+<p align="center"><img src="docs/images/ui-search-methods.png" alt="Search methods demo" width="100%" /></p>
+<p align="center"><img src="docs/images/temporal-workflow-detail.png" alt="Temporal workflow detail" width="100%" /></p>
+
+</details>
+
+## Features
+
+- **Durable workflows**: Temporal handles retries and keeps a full execution history. A worker killed mid-transaction picks the work up again after a restart.
+- **Hybrid search**: MongoDB Atlas vector search finds similar transactions, with a rule-based fallback when `$vectorSearch` is unavailable.
+- **Explainable decisions**: the LLM returns a decision, confidence and reasoning. Thresholds are configurable (auto-approve at 85 confidence by default, manager approval above 50,000 USD).
+- **Human review queue**: escalated transactions appear in the dashboard for approve or reject with comments.
+- **Pluggable LLM and embeddings**: `LLM_PROVIDER` selects `bedrock`, `groq` or `openai` (any OpenAI-compatible endpoint, including Nebius Token Factory). Embeddings use Voyage, Cohere via Bedrock, or OpenAI-compatible models.
+- **Monocle tracing**: one `import monocle_bootstrap` line per entrypoint wraps the LLM client, rule engine, risk engine, embedding client and three Temporal activities.
+- **Okahu evals**: recorded traces are graded for hallucination, PII, bias and a custom "grounded fraud reasoning" template.
+- **Test suite**: 430+ unit and integration tests with a coverage gate of 95%.
+
+## Tech stack
+
+| Layer | Tool |
+| --- | --- |
+| Orchestration | [Temporal](https://temporal.io) |
+| Database | [MongoDB Atlas](https://www.mongodb.com/docs/atlas/) with vector search |
+| API | [FastAPI](https://fastapi.tiangolo.com) |
+| Dashboard | [Streamlit](https://streamlit.io) |
+| LLM | [AWS Bedrock](https://aws.amazon.com/bedrock/) (Claude), [Groq](https://groq.com), or any OpenAI-compatible endpoint such as [Nebius Token Factory](https://docs.tokenfactory.nebius.com) |
+| Embeddings | [Voyage AI](https://www.voyageai.com), Cohere via Bedrock, or OpenAI-compatible |
+| Observability and evals | [Monocle](https://github.com/monocle2ai/monocle) and [Okahu](https://okahu.ai) |
+| Packaging | [uv](https://docs.astral.sh/uv/), Docker Compose |
+
+## Getting started
+
+### Prerequisites
+
+- Python 3.13 or later
+- [uv](https://docs.astral.sh/uv/)
+- Docker and Docker Compose
+- A MongoDB Atlas account (free tier works)
+- An LLM provider: AWS Bedrock access, a Groq key, or an OpenAI-compatible endpoint key
+- A Voyage AI key for embeddings (recommended), or use the OpenAI-compatible embedding option
+- An Okahu API key from [portal.okahu.co](https://portal.okahu.co) for the evals (optional)
+- 8 GB of RAM
+
+### Installation
 
 ```bash
-# use the OpenAI provider (Nebius or any OpenAI-compat endpoint)
+git clone https://github.com/Studio1HQ/temporal-ai-mongo.git
+cd temporal-ai-mongo
+cp .env.example .env
+uv sync --extra dev
+```
+
+Use `uv sync --frozen` for a reproducible install from `uv.lock`.
+
+### Environment variables
+
+Edit `.env`. See `.env.example` and [docs/CONFIGURATION.md](docs/CONFIGURATION.md) for the full list.
+
+| Variable | Description |
+| --- | --- |
+| `MONGODB_URI` | MongoDB connection string. Atlas, or `mongodb://localhost:27017/?directConnection=true` locally. |
+| `MONGODB_DB_NAME` | Database name. Default `transaction_ai_poc`. |
+| `TEMPORAL_HOST` | Temporal address. Default `localhost:7233`, or `temporal:7233` under Docker. |
+| `TEMPORAL_NAMESPACE`, `TEMPORAL_TASK_QUEUE` | Namespace (`default`) and queue (`transaction-processing-queue`). |
+| `LLM_PROVIDER` | `bedrock` (default), `groq` or `openai`. |
+| `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | Required for Bedrock. |
+| `BEDROCK_MODEL_VERSION` | Bedrock Claude model ID. |
+| `GROQ_API_KEY`, `GROQ_MODEL_ID` | Used when `LLM_PROVIDER=groq`. |
+| `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_MODEL` | Used when `LLM_PROVIDER=openai`. For Nebius: base URL `https://api.tokenfactory.nebius.com/v1/`, model `meta-llama/Llama-3.3-70B-Instruct`. |
+| `EMBEDDING_PROVIDER`, `OPENAI_EMBEDDING_MODEL`, `VECTOR_DIMENSION` | Set `EMBEDDING_PROVIDER=openai`, for example `Qwen/Qwen3-Embedding-8B` with `VECTOR_DIMENSION=4096`. |
+| `VOYAGE_API_KEY`, `VOYAGE_MODEL` | Voyage embeddings (default model `voyage-4`, 1024 dimensions). |
+| `CONFIDENCE_THRESHOLD_APPROVE`, `CONFIDENCE_THRESHOLD_ESCALATE` | Confidence cut-offs (85 and 70). |
+| `AUTO_APPROVAL_LIMIT` | Maximum amount before manager approval, in USD. Default 50000. |
+| `OKAHU_API_KEY`, `OKAHU_APP_ID`, `MONOCLE_EXPORTER` | Okahu tracing, for example `MONOCLE_EXPORTER=file,okahu`. |
+| `API_BASE_URL` | `http://localhost:8000/api` locally, `http://api:8000/api` under Docker. |
+
+### Run
+
+Quick setup scripts:
+
+```bash
+./scripts/quick_setup.sh    # venv, deps, Temporal on Docker, then launch the app
+./scripts/docker_setup.sh   # everything on Docker
+```
+
+Or run each piece yourself. Start Temporal, seed MongoDB, then start three processes:
+
+```bash
+cd docker-compose && docker compose up -d && cd ..
+uv run python -m scripts.setup_mongodb      # collections, indexes, vector index, seed data
+
+uv run python -m temporal.run_worker        # terminal 1: worker
+uv run uvicorn api.main:app --reload        # terminal 2: API
+uv run streamlit run app.py                 # terminal 3: dashboard
+```
+
+| Service | URL |
+| --- | --- |
+| Streamlit dashboard | <http://localhost:8501> |
+| API docs | <http://localhost:8000/docs> |
+| Temporal UI | <http://localhost:8080> |
+
+Docker option: start Temporal with `cd docker-compose && docker compose up -d`, then `docker compose up -d` for the API, worker and dashboard. Check with `curl http://localhost:8000/health`.
+
+Submit a transaction:
+
+```bash
+curl -X POST 'http://localhost:8000/api/transaction' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "transaction_type": "wire_transfer",
+  "amount": 100,
+  "currency": "USD",
+  "sender": {"account_number": "ACC-12345", "country": "US", "name": "Sam Eagleton"},
+  "recipient": {"account_number": "ACC-67890", "country": "UK", "name": "Nigel Wadsworth"},
+  "reference_number": "95027064"
+}'
+
+# Poll until it returns 200 instead of 202 (pending)
+curl http://localhost:8000/api/transaction/<transaction_id>
+```
+
+Run the high-value scenario, which lands in the "Pending Manager Approval" queue:
+
+```bash
+uv run python -m scripts.advanced_scenarios
+```
+
+### Run the eval loop
+
+```bash
 export LLM_PROVIDER=openai
 export EMBEDDING_PROVIDER=openai
 export MONOCLE_EXPORTER=file,okahu
 export OKAHU_API_KEY=okh_...
 export OKAHU_APP_ID=mongodb-fraud-agent_<six-chars>   # from portal.okahu.co
 
-uv sync --extra dev
-uv run python -m scripts.setup_mongodb                # seed Mongo (Atlas or Atlas Local)
-uv run python -m temporal.run_worker &                # worker
-uv run uvicorn api.main:app --port 8010 &             # API
-uv run python -m evals.record_from_scenarios          # 5 real scenarios end-to-end
-uv run python -m evals.submit_evals                   # graded evals → Okahu
-
-# Then in VS Code: open the Okahu extension, read the verdicts, ask Kahu
-# for the RCA, paste into Claude Code, approve the fix, re-run.
+uv run python -m scripts.setup_mongodb
+uv run python -m temporal.run_worker &
+uv run uvicorn api.main:app --port 8010 &
+uv run python -m evals.record_from_scenarios   # 5 real scenarios end to end
+uv run python -m evals.submit_evals            # graded evals sent to Okahu
 ```
 
-**Minimum required env** (see [`.env.example`](.env.example) for the full list):
+Verdicts appear in the Okahu portal, the VS Code Okahu extension and Kahu Chat. Ask Kahu for a root-cause analysis, apply the fix and re-run.
 
-```ini
-MONGODB_URI=mongodb://localhost:27017/?directConnection=true   # or Atlas
-LLM_PROVIDER=openai
-OPENAI_API_KEY=...
-OPENAI_BASE_URL=https://api.tokenfactory.nebius.com/v1/        # or api.openai.com/v1/
-OPENAI_MODEL=meta-llama/Llama-3.3-70B-Instruct                 # or gpt-4o-mini
-EMBEDDING_PROVIDER=openai
-OPENAI_EMBEDDING_MODEL=Qwen/Qwen3-Embedding-8B                 # 4096 dims
-VECTOR_DIMENSION=4096
-OKAHU_API_KEY=okh_...
-OKAHU_APP_ID=mongodb-fraud-agent_...
-MONOCLE_EXPORTER=file,okahu
-```
+Known constraint: the `mongodb-atlas-local` Docker image does not expose `$vectorSearch` without an Atlas CLI local deployment. `find_similar_transactions` then falls back to traditional search. Point `MONGODB_URI` at an Atlas cluster for full vector search.
 
-**Known constraint:** `mongodb-atlas-local` Docker image does not expose `$vectorSearch` without an Atlas CLI local deployment. The workflow's `find_similar_transactions` gracefully falls back to traditional/rule-based search; the rule and risk engine spans still give the graders plenty of evidence. For full vector-search coverage, point `MONGODB_URI` at an Atlas cluster.
-
----
-
-## Quick Start
+### Tests
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/mongodb-partners/mongodb-temporal-ai-agent-qs.git
-cd mongodb-temporal-ai-agent-qs
-
-# 2. Configure environment (minimal setup)
-cp .env.example .env
-# Edit .env with your MongoDB Atlas URI and AWS credentials
-
-# 3. Run quick setup (creates venv, installs deps, starts Temporal on Docker and launch the app)
-./scripts/quick_setup.sh
-
-# or Run docker setup (Deploy everything on Docker and launch the app)
-./scripts/docker_setup.sh
+uv run pytest --cov                                                              # full suite, 95% gate
+uv run pytest tests/test_decimal_utils.py tests/test_rule_engine.py tests/test_risk_engine.py   # fast unit tests
+uv run pytest tests/test_db_integration.py tests/test_api_integration.py         # needs Docker
 ```
 
-## Table of Contents
-
-- [About this fork](#about-this-fork)
-- [Overview](#overview)
-- [Business Value & Use Cases](#business-value--use-cases)
-- [Architecture](#architecture)
-- [Installation & Configuration](#installation--configuration)
-- [Usage](#usage)
-- [Evaluation Guide](#evaluation-guide)
-- [Troubleshooting](#troubleshooting)
-- [Next Steps](#next-steps)
-- [License](#license)
-
-## Overview
-
-**What It Does:** Processes financial transactions through an AI-powered decision pipeline that combines rule-based evaluation, vector similarity search, and advanced fraud detection to provide real-time approve/reject decisions with detailed reasoning.
-
-**Business Value:**
-
-- ✅ **Advanced fraud detection** through hybrid AI + vector search approach
-- ✅ **Reduced operational costs** via automated transaction processing
-- ✅ **Fast decision processing** with asynchronous workflows
-- ✅ **Decreased manual review workload** through AI-assisted decisions
-- ✅ **Complete audit trails** with explainable AI reasoning
-
-**PoV Scope Limitations:**
-
-- Mock data for demonstration (no real financial data)
-- Single-region deployment (production would be multi-region)
-- Performance not optimized for high throughput
-- Basic notification system
-- Simplified compliance checks (production requires full KYC/AML)
-
-## Business Value & Use Cases
-
-### Primary Scenarios Demonstrated
-
-1. **Fraud Ring Detection** - Identifies coordinated criminal networks through graph traversal
-2. **Real-time Risk Scoring** - AI-powered analysis with confidence scoring
-3. **Automated Compliance** - Sanctions screening and regulatory checks
-4. **Human-in-the-Loop** - Escalation workflows for complex cases
-5. **Cost Optimization** - Reduces manual review while maintaining accuracy
-
-### Expected Measurable Outcomes (KPIs)
-
-| Metric               | Description                                 | PoV Demonstrates             |
-| -------------------- | ------------------------------------------- | ---------------------------- |
-| Detection Capability | AI-powered analysis                         | Multi-factor risk assessment |
-| Processing Speed     | Workflow execution time                     | Asynchronous processing      |
-| Auto-Approval        | Transactions approved without manual review | Confidence-based decisions   |
-| Manual Review        | Human-in-the-loop capability                | Queue management system      |
-| Audit Trail          | Decision tracking                           | Complete workflow history    |
-
-### Enterprise Alignment
-
-- **MongoDB Atlas Integration:** Demonstrates vector search, ACID transactions, and aggregation pipelines
-- **AI Workflow Orchestration:** Shows Temporal's reliability for mission-critical processes
-- **Cloud-Native Architecture:** Ready for AWS/Azure/GCP deployment
-- **Regulatory Compliance:** Built-in audit trails and explainability
-
-## Architecture
-
-### High-Level System Flow
+## How it works
 
 ```mermaid
 graph LR
@@ -148,347 +200,75 @@ graph LR
     B --> C[MongoDB Atlas]
     B --> D{LLM_PROVIDER}
     D -->|primary| D1[AWS Bedrock - Claude]
-    D -->|alternative| D2[Groq]
+    D -->|alternative| D2[Groq / OpenAI-compatible]
     C --> E[Vector Search]
     C --> F[Graph Analysis]
     D1 --> G[Fraud Detection]
-    D2 --> G[Fraud Detection]
+    D2 --> G
     G --> H{Decision}
     H -->|Approved| I[Process Transaction]
     H -->|Review| J[Human Queue]
-    H -->|Rejected| K[Block & Alert]
+    H -->|Rejected| K[Block and Alert]
     J --> L[Dashboard UI]
 ```
 
-### Key Components (PoV Scope)
-
-- **FastAPI Backend** - REST API for transaction submission
-- **Temporal Worker** - Durable workflow execution engine
-- **MongoDB Atlas** - Document store with vector search capabilities
-- **AWS Bedrock** - Claude for transaction analysis (primary LLM provider)
-- **Groq** - Alternative LLM provider (selectable via `LLM_PROVIDER`)
-- **Voyage AI** - Finance-optimized embeddings (primary embedding provider, 1024 dims)
-- **AWS Bedrock + Cohere** - Embedding fallback when Voyage is unavailable
-- **Streamlit Dashboard** - Real-time monitoring and review interface
-
-### Integration Points
-
-- MongoDB Atlas with 1024-dimensional vector indexes
-- Temporal for workflow orchestration and retry logic
-- AWS Bedrock API for AI inference
-- RESTful APIs for external system integration
-
-For detailed architecture documentation, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
-
-## Installation & Configuration
-
-### Prerequisites
-
-- Python 3.13+
-- [uv](https://docs.astral.sh/uv/) for dependency management
-- Docker & Docker Compose
-- MongoDB Atlas account (free tier works)
-- AWS account with Bedrock access (Claude + Cohere)
-- Voyage AI API key (recommended for finance-optimized embeddings)
-- Groq API key (optional, for Groq LLM provider)
-- 8GB RAM minimum
-
-### Quick Setup (Docker)
-
-```bash
-# Start Temporal infrastructure (separate compose file)
-cd docker-compose && docker compose up -d && cd ..
-
-# Start application services (API, worker, dashboard)
-docker compose up -d
-
-# Verify services are running
-docker compose ps
-curl http://localhost:8000/health
+```text
+api/                FastAPI endpoints
+temporal/           workflows, activities, worker
+services/           rule_engine.py, risk_engine.py
+ai/                 bedrock, groq, openai clients, embeddings, prompts
+database/           repositories and schemas
+monocle_bootstrap.py  Monocle wrappers, imported by api/main.py and run_worker.py
+evals/              record_from_scenarios.py, submit_evals.py, templates/, traces/
 ```
 
-### Local Development Setup
-
-This project uses [`uv`](https://docs.astral.sh/uv/) for dependency and
-environment management. Install it once:
-
-```bash
-# macOS / Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-Then bootstrap the project:
-
-```bash
-# Install runtime + dev deps (creates .venv from uv.lock)
-uv sync --extra dev
-
-# Start Temporal (required)
-cd docker-compose && docker compose up -d && cd ..
-
-# Initialize MongoDB (collections, indexes, vector index, seed data)
-uv run python -m scripts.setup_mongodb
-
-# Start services (3 terminals needed)
-uv run python -m temporal.run_worker     # Terminal 1: Worker
-uv run uvicorn api.main:app --reload     # Terminal 2: API
-uv run streamlit run app.py              # Terminal 3: Dashboard
-
-# Run tests with coverage
-uv run pytest --cov
-```
-
-To produce a reproducible install in CI or fresh checkouts use
-`uv sync --frozen` against the committed `uv.lock`.
-
-### Configuration
-
-| Variable                       | Description                               | Default                                      | Required |
-| ------------------------------ | ----------------------------------------- | -------------------------------------------- | -------- |
-| `MONGODB_URI`                  | MongoDB Atlas connection string           | -                                            | ✅       |
-| `MONGODB_DB_NAME`              | Database name                             | `transaction_ai_poc`                         | ❌       |
-| `AWS_REGION`                   | AWS region for Bedrock                    | `us-east-1`                                  | ✅       |
-| `AWS_ACCESS_KEY_ID`            | AWS credentials for Bedrock               | -                                            | ✅       |
-| `AWS_SECRET_ACCESS_KEY`        | AWS secret key                            | -                                            | ✅       |
-| `LLM_PROVIDER`                 | LLM backend: `bedrock` (Claude) or `groq` | `bedrock`                                    | ❌       |
-| `BEDROCK_MODEL_VERSION`        | Bedrock Claude model ID                   | `us.anthropic.claude-opus-4-1-20250805-v1:0` | ❌       |
-| `GROQ_API_KEY`                 | Groq API key (if `LLM_PROVIDER=groq`)     | -                                            | ❌       |
-| `GROQ_MODEL_ID`                | Groq model ID                             | `openai/gpt-oss-120b`                        | ❌       |
-| `VOYAGE_API_KEY`               | Voyage AI API key (primary embeddings)    | -                                            | ❌       |
-| `VOYAGE_MODEL`                 | Voyage embedding model                    | `voyage-4`                                   | ❌       |
-| `CONFIDENCE_THRESHOLD_APPROVE` | Min confidence for auto-approval          | `85`                                         | ❌       |
-| `AUTO_APPROVAL_LIMIT`          | Max amount before manager approval (USD)  | `50000`                                      | ❌       |
-| `TEMPORAL_HOST`                | Temporal server address                   | `localhost:7233`                             | ❌       |
-| `TEMPORAL_NAMESPACE`           | Temporal namespace                        | `default`                                    | ❌       |
-
-For complete configuration options, see [docs/CONFIGURATION.md](docs/CONFIGURATION.md).
-
-## Usage
-
-### Dashboard Interface
-
-The system includes a comprehensive Streamlit dashboard for monitoring and managing transactions:
-
-![Dashboard Overview](docs/images/ui-dashboard-main.png)
-
-**Key Features:**
-
-- 📊 **Real-time Metrics** - Monitor transaction volume, processing time, and AI confidence
-- 🔍 **Hybrid Search Demo** - Visualize how different search methods work together
-- 🚀 **Scenario Launcher** - Run pre-configured fraud detection scenarios
-- 👥 **Human Review Queue** - Manage transactions requiring manual review
-- ⚙️ **Active Workflows** - Track processing status in real-time
-
-For detailed UI instructions, see the [UI Usage Guide](docs/UI_GUIDE.md).
-
-### Basic Transaction Submission
-
-```bash
-# Submit a test transaction
-curl -X POST 'http://localhost:8000/api/transaction' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "transaction_type": "wire_transfer",
-  "amount": 100,
-  "currency": "USD",
-  "sender": {
-    "account_number": "ACC-12345",
-    "country": "US",
-    "name": "Sam Eagleton"
-  },
-  "recipient": {
-    "account_number": "ACC-67890",
-    "country": "UK",
-    "name": "Nigel Wadsworth"
-  },
-  "reference_number": "95027064"
-}'
-
-# Response includes the assigned transaction_id and Temporal workflow_id
-# Poll the decision endpoint until it returns 200 (rather than 202 pending)
-curl http://localhost:8000/api/transaction/<transaction_id>
-```
-
-### Demo Walkthrough: Fraud Detection
-
-#### Step 1: Launch Scenario
-
-Use the Scenario Launcher in the left sidebar to run pre-configured test cases:
-
-![Active Workflows](docs/images/ui-active-workflows.png)
-
-Select "Fraud Ring Detection" and click "Run Scenario" to submit suspicious transactions.
-
-#### Step 2: View Results
-
-Monitor the scenario execution and see AI decisions:
-
-![Scenario Results](docs/images/ui-scenario-results.png)
-
-The system detects structuring patterns and escalates transactions for review.
-
-#### Step 3: Human Review
-
-Review escalated transactions with AI recommendations:
-
-![Human Review](docs/images/ui-human-review-detail.png)
-
-Make informed decisions based on AI analysis and transaction details.
-
-### Demo Scenario: High-Value Transaction
-
-```bash
-# Submit high-value transaction requiring manager approval
-uv run python -m scripts.advanced_scenarios
-
-# Monitor in dashboard: http://localhost:8501
-# Transaction will appear in "Pending Manager Approval" queue
-```
-
-### Monitoring Workflow Execution
-
-1. **Streamlit Dashboard:** http://localhost:8501
-   - Real-time transaction status
-   - Decision distribution charts
-   - Human review queue
-   - Performance metrics
-
-2. **Temporal UI:** http://localhost:8080
-   - Workflow execution history
-   - Activity retry details
-   - Signal/query interface
-
-3. **API Documentation:** http://localhost:8000/docs
-   - Interactive API testing
-   - Schema definitions
-   - Response examples
-
-## Evaluation Guide
-
-### Core Flows to Test
-
-1. **Automated Approval Path**
-   - Submit low-risk transaction (<$5000, domestic)
-   - Verify immediate approval
-   - Check audit trail creation
-
-2. **Fraud Detection**
-   - Run velocity check scenario
-   - Observe AI reasoning in dashboard
-   - Validate similar transaction matching
-
-3. **Human Review Workflow**
-   - Submit medium-confidence transaction
-   - Review in dashboard queue
-   - Approve/reject with comments
-
-4. **System Resilience**
-   - Kill Temporal worker mid-transaction
-   - Restart worker
-   - Verify transaction completes successfully
-
-### Success Metrics Checklist
-
-- [ ] Test transactions processed successfully
-- [ ] Fraud scenarios correctly identified (8/10 minimum)
-- [ ] Human review queue updates in real-time
-- [ ] Audit trail captures all decisions
-- [ ] Vector search returns relevant similar transactions
-- [ ] Manager escalation triggers for >$50K transactions
-
-For detailed evaluation procedures, see [docs/EVALUATION_GUIDE.md](docs/EVALUATION_GUIDE.md).
-
-## Troubleshooting
-
-### Common Issues
-
-| Problem                   | Cause                        | Solution                                        |
-| ------------------------- | ---------------------------- | ----------------------------------------------- |
-| MongoDB connection failed | Invalid URI or network issue | Verify Atlas URI, check IP whitelist            |
-| Bedrock timeout errors    | Missing AWS credentials      | Ensure AWS keys are in .env file                |
-| Worker not processing     | Temporal not running         | Run `docker compose up -d` in `docker-compose/` |
-| Dashboard blank           | API not accessible           | Check API is running on port 8000               |
-| Vector search no results  | Missing index                | Run `uv run python -m scripts.setup_mongodb`    |
-
-For detailed troubleshooting, see [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).
-
-## Testing
-
-The repository ships with 430+ unit and integration tests covering 97% of the
-in-scope source code (line + branch coverage).
-
-```bash
-# Run the full test suite with coverage gate (≥95%)
-uv run pytest --cov
-
-# Run only fast unit tests (no Docker/MongoDB required)
-uv run pytest tests/test_decimal_utils.py tests/test_rule_engine.py tests/test_risk_engine.py
-
-# Run integration tests (requires Docker for testcontainers)
-uv run pytest tests/test_db_integration.py tests/test_api_integration.py
-```
-
-| Test type         | Location                                                                                                     | What it covers                                                                                          |
-| ----------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
-| Unit              | `tests/test_*.py`                                                                                            | Pure functions: decimal utils, rule/risk engines, schemas, prompts, AI client adapters                  |
-| Integration       | `tests/test_db_integration.py`                                                                               | Repositories against a real MongoDB 7.0 replica set spun up via `testcontainers`                        |
-| API               | `tests/test_api_integration.py`                                                                              | FastAPI endpoints via `TestClient` + real MongoDB                                                       |
-| Workflow          | `tests/test_temporal_workflows.py`                                                                           | Temporal workflow control flow via `temporalio.testing.WorkflowEnvironment` (in-process, time-skipping) |
-| Regression fences | `tests/test_motor_to_pymongo_async.py`, `tests/test_search_regression.py`, `tests/test_voyage_embeddings.py` | Static assertions guarding key migrations and behaviours                                                |
-
-Coverage configuration lives in `pyproject.toml` under `[tool.coverage.run]`
-and `[tool.coverage.report]`. The gate is `fail_under = 95`.
-
-## Next Steps
-
-### If PoV is Successful
-
-**Scaling Considerations:**
-
-- Deploy to Kubernetes for auto-scaling
-- Implement multi-region MongoDB Atlas clusters
-- Add a caching layer for performance
-- Configure CDN for dashboard assets
-
-**Security Hardening:**
-
-- Enable MongoDB encryption at rest
-- Implement OAuth2/SAML authentication
-- Add rate limiting and DDoS protection
-- Configure AWS PrivateLink for Bedrock
-
-**CI/CD Pipeline:**
-
-- GitHub Actions for automated testing
-- Docker image registry with vulnerability scanning
-- Blue-green deployment strategy
-- Automated performance regression testing
-
-**Production Monitoring:**
-
-- DataDog/New Relic APM integration
-- Custom CloudWatch metrics and alarms
-- PagerDuty incident management
-- Grafana dashboards for business KPIs
+The original proof of value covers fraud ring detection, real-time risk scoring, sanctions-style compliance checks and human-in-the-loop escalation. Scope limits: mock data only, single region, no throughput tuning, a basic notification system and simplified compliance checks. This is a reference implementation, not production code.
+
+Evaluation flows to try: a low-risk domestic transaction under 5,000 USD approves automatically; a velocity scenario shows AI reasoning and similar-transaction matches; a medium-confidence transaction goes to the review queue; a transaction over 50,000 USD escalates to a manager; and killing the worker mid-transaction still completes after a restart. See [docs/EVALUATION_GUIDE.md](docs/EVALUATION_GUIDE.md).
+
+| Problem | Fix |
+| --- | --- |
+| MongoDB connection failed | Check the URI and the Atlas IP allow list. |
+| Bedrock timeouts | Make sure AWS keys are in `.env`. |
+| Worker not processing | Run `docker compose up -d` in `docker-compose/`. |
+| Dashboard blank | Check the API is running on port 8000. |
+| Vector search returns nothing | Run `uv run python -m scripts.setup_mongodb`. |
+
+## Resources
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/CONFIGURATION.md](docs/CONFIGURATION.md), [docs/EVALUATION_GUIDE.md](docs/EVALUATION_GUIDE.md), [docs/UI_GUIDE.md](docs/UI_GUIDE.md), [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md): detailed guides in this repo.
+- [Okahu docs](https://docs.okahu.ai) and [site](https://okahu.ai): observability and evals.
+- [Monocle](https://github.com/monocle2ai/monocle): open-source tracing for agentic apps.
+- [Temporal docs](https://docs.temporal.io) and [site](https://temporal.io): workflow orchestration.
+- [MongoDB Atlas docs](https://www.mongodb.com/docs/atlas/): vector search and clusters.
+- [Nebius Token Factory docs](https://docs.tokenfactory.nebius.com): OpenAI-compatible inference.
+- [mongodb-temporal-ai-agent-qs](https://github.com/mongodb-partners/mongodb-temporal-ai-agent-qs): the upstream sample this repo forks.
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+Released under the [Apache License 2.0](LICENSE).
+
+<br />
 
 ---
 
-**Questions?** Contact the Solution Architecture team or open an issue in this repository.
+<div align="center">
 
-**Ready to evaluate?** Start with the [Quick Start](#quick-start) section above.
+<a href="https://studio1hq.com">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Studio1HQ/website/main/brand/studio1-logo-on-dark.svg" />
+    <img src="https://raw.githubusercontent.com/Studio1HQ/website/main/brand/studio1-logo-on-light.svg" alt="Studio1" width="160" />
+  </picture>
+</a>
 
-> **Note:** This repository contains a reference implementation intended for educational and exploratory purposes only. It is **not production-ready** in its current form.
->
-> While the architecture and design patterns demonstrated here reflect best practices for building AI-Powered Transaction Processing System, the implementation may lack:
->
-> - Comprehensive test coverage
-> - Robust error handling and validation
-> - Security hardening and access controls
-> - Performance optimizations for scale
-> - Long-term support or upgrade guarantees
->
-> **Use this as a foundation** to guide your own production implementations, but ensure thorough validation and customization before deploying in real-world environments.
+Built by **[Studio1](https://studio1hq.com)**, the technical content and DevRel partner for devtool teams. Made with [Okahu](https://okahu.ai).<br />
+Browse more open-source examples at [github.com/Studio1HQ](https://github.com/Studio1HQ).
+
+[![Website](https://img.shields.io/badge/studio1hq.com-0b0807?style=for-the-badge&logo=googlechrome&logoColor=white)](https://studio1hq.com)
+[![Book a call](https://img.shields.io/badge/Book_a_strategy_call-f97316?style=for-the-badge&logo=googlecalendar&logoColor=white)](https://cal.com/studio1/collab)
+[![X](https://img.shields.io/badge/%40Studio1HQ-141414?style=for-the-badge&logo=x&logoColor=white)](https://x.com/Studio1HQ)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0a66c2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/company/studio1hq/)
+
+<sub><a href="https://studio1hq.com">studio1hq.com</a> · Technical content, docs, video and DevRel for devtools</sub>
+
+</div>
